@@ -1,6 +1,6 @@
 <?php
  	session_start();
-  	require('functions.php');
+	require('functions/connectDB.php');
 	//$db=connectDB();
 ?>
 <!doctype html>
@@ -29,7 +29,7 @@
 	<form action="logout.php" method="get">
 		<span>Welcome, <?php echo $_SESSION['username'];?></span>
 		<p><input id="logout" type="submit" value="Logout">
-		<a href="userInfo.php">change Information</a></p>
+		<a href="user_info.php">change Information</a></p>
 	</form>		
 <?php }?>
 </div>

@@ -1,14 +1,17 @@
 <?php
 session_start();
-require('functions.php');
+require('functions/connectDB.php');
 
 class API {
 	
-private $pdo;
-private $userName;
-private $email;
-
-	function __construct($config)
+	private $pdo;
+	private $userName;
+	private $email;
+	private $id;
+	function __construct(){
+		$this->pdo = connectDB(); //get the connection
+	}
+	/*function __construct($config)
 	{
 		try{
 			// Create a connection to the database.
@@ -30,7 +33,7 @@ private $email;
 		} catch (PDOException $e) {
 			echo $e->getMessage();
 		}
-	}
+	}*/
 	function checkIdPassword($id,$password){
 		$stmt = $this->pdo->prepare('SELECT * FROM lts_users where id = ? AND password = ?');
 		$stmt->execute(array($id,$password));
@@ -38,13 +41,14 @@ private $email;
 		if(count($userInfoArray)>0){
 			$this->userName = $userInfoArray[0]['username'];
 			$this->email = $userInfoArray[0]['email'];
+			$this->id = $userInfoArray[0]['id'];
 			if($array['level']==2){
-				return 2;	
+				return 2;	//admin level
 			}else{
-				return 1;
+				return 1;	//user level
 			}
 		}else{
-			return 0;
+			return 0; 		//login fail
 		}
 	}
 	function getUserName() {
@@ -53,21 +57,27 @@ private $email;
 	function getEmail() {
 		return $this->email;
 	}
+	function getId(){
+		return $this->id;
+	}
 }
 /////////////////////////////////////////////////////////////////
 try
 {
-	$api = new API(returnDBInfo());
-
+	//$api = new API(returnDBInfo());
+	$api = new API();
+	
 	if ($api->checkIdPassword($_POST["id"],$_POST["password"])==2) {
 		$_SESSION['adminLoggedIn'] = 'true';
 		$_SESSION['username']=$api->getUserName();
 		$_SESSION['email']=$api->getEmail();
+		$_SESSION['id']=$api->getId();
 		$_SESSION['approved'] = 1;
 		header("location: ./admin.php");
 	} else if ($api->checkIdPassword($_POST["id"],$_POST["password"])== 1) {
 			$_SESSION['username']=$api->getUserName();
 			$_SESSION['email']=$api->getEmail();
+			$_SESSION['id']=$api->getId();
 			$_SESSION['approved'] = 1;
 			header("location:".$_SERVER['HTTP_REFERER']);
 	} else {
