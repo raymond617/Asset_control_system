@@ -1,13 +1,12 @@
 <?php
 $arrayForPDO = array(
 	 'db' => array(
-		       'host'     => '127.0.0.1',
+		    'host'     => '127.0.0.1',
 			'dbname'   => 'lts',
 			'username' => 'root',
 			'password' => '',
 			)
       );
-
 
 function connectDB(){
 	global $arrayForPDO;

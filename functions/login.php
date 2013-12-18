@@ -1,6 +1,6 @@
 <?php
+require_once ('../class/Objects.php');
 session_start();
-require('functions/connectDB.php');
 
 class API {
 	
@@ -11,29 +11,7 @@ class API {
 	function __construct(){
 		$this->pdo = connectDB(); //get the connection
 	}
-	/*function __construct($config)
-	{
-		try{
-			// Create a connection to the database.
-			$this->pdo = new PDO(
-			       'mysql:host=' .$config['db']['host'].';
-				    dbname=' .$config['db']['dbname'], 
-					$config['db']['username'],
-					$config['db']['password'],
-					array());
 	
-			// If there is an error executing database queries, we want PDO to
-			// throw an exception. Our exception handler will then exit the script
-			// with a "500 Server Error" message.
-			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	
-			// We want the database to handle all strings as UTF-8.
-			$this->pdo->query('SET NAMES utf8');
-	
-		} catch (PDOException $e) {
-			echo $e->getMessage();
-		}
-	}*/
 	function checkIdPassword($id,$password){
 		$stmt = $this->pdo->prepare('SELECT * FROM lts_users where id = ? AND password = ?');
 		$stmt->execute(array($id,$password));
@@ -42,7 +20,7 @@ class API {
 			$this->userName = $userInfoArray[0]['username'];
 			$this->email = $userInfoArray[0]['email'];
 			$this->id = $userInfoArray[0]['id'];
-			if($array['level']==2){
+			if($userInfoArray[0]['user_level']==2){
 				return 2;	//admin level
 			}else{
 				return 1;	//user level
@@ -60,6 +38,9 @@ class API {
 	function getId(){
 		return $this->id;
 	}
+	function getPdo(){
+		return $this->pdo;
+	}
 }
 /////////////////////////////////////////////////////////////////
 try
@@ -67,18 +48,33 @@ try
 	//$api = new API(returnDBInfo());
 	$api = new API();
 	
-	if ($api->checkIdPassword($_POST["id"],$_POST["password"])==2) {
-		$_SESSION['adminLoggedIn'] = 'true';
-		$_SESSION['username']=$api->getUserName();
+	if ($api->checkIdPassword($_POST["id"],$_POST["password"])==3) {
+		//$_SESSION['adminLoggedIn'] = 'true';
+		$admin = new AdminObject($_POST['id']);
+		$_SESSION['object'] = $admin;
+		/*$_SESSION['username']=$api->getUserName();
 		$_SESSION['email']=$api->getEmail();
-		$_SESSION['id']=$api->getId();
+		$_SESSION['id']=$api->getId();*/
 		$_SESSION['approved'] = 1;
 		header("location: ./admin.php");
-	} else if ($api->checkIdPassword($_POST["id"],$_POST["password"])== 1) {
-			$_SESSION['username']=$api->getUserName();
+	} else if ($api->checkIdPassword($_POST["id"],$_POST["password"])== 2) {
+		$teacher = new TeacherObject($_POST['id']);
+		$_SESSION['object'] = $teacher;
+		$_SESSION['approved'] = 1;
+		header("location:".$_SERVER['HTTP_REFERER']);
+	} else if ($api->checkIdPassword($_POST["id"],$_POST["password"])== 1) {			
+			$user = new UserObject($_POST["id"]);
+			//var_dump($user);			
+			/*$_SESSION['username']=$api->getUserName();
 			$_SESSION['email']=$api->getEmail();
 			$_SESSION['id']=$api->getId();
+			
+			var_dump($_SESSION);
+			echo "\n\n\n";*/
+			//var_dump(serialize($user));
+			$_SESSION['object'] = $user;
 			$_SESSION['approved'] = 1;
+			//var_dump($_SESSION['object']);
 			header("location:".$_SERVER['HTTP_REFERER']);
 	} else {
 			$_SESSION['approved'] = 0;
@@ -107,3 +103,4 @@ function exitWithHttpError($error_code, $message = '')
 
 	exit;
 }
+?>
