@@ -1,5 +1,5 @@
 <?php
-	require_once 'functions/Objects.php';
+	require_once 'class/Objects.php';
 	require_once ('functions/system_function.php');
 	session_start();
 	if (checkLogined()==true){
@@ -31,7 +31,7 @@
 	<input id="type" name="type" type="text" value="">
 	<label for="days_b4_alert">Date before alert:</label>
 	<input id="days_b4_alert" name="days_b4_alert" type="text" value="">
-	<input id="action" name="action" type="hidden" value="add_asset">
+	<input id="action" name="add_asset" type="hidden" value="true">
 	
 	<input id="submit" type="submit" value="Add assets">
 </form>

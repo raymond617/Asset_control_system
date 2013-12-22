@@ -1,5 +1,5 @@
 <?php
-	require_once 'functions/Objects.php';
+	require_once 'class/Objects.php';
 	require_once ('functions/system_function.php');
  	session_start();
 	//require('functions/connectDB.php');

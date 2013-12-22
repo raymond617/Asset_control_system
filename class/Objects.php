@@ -1,5 +1,6 @@
 <?php
-require('../functions/connectDB.php');
+//require(__DIR__.'/../functions/connectDB.php');
+require_once ('/../functions/connectDB.php');
 abstract class UserInfo{
 	//private $pdo;
 	private $email;
