@@ -20,11 +20,13 @@ class API {
 			$this->userName = $userInfoArray[0]['username'];
 			$this->email = $userInfoArray[0]['email'];
 			$this->id = $userInfoArray[0]['id'];
-			if($userInfoArray[0]['user_level']==2){
-				return 2;	//admin level
-			}else{
-				return 1;	//user level
-			}
+			if($userInfoArray[0]['user_level']==3){
+				return 3;	//admin level
+			}else if($userInfoArray[0]['user_level']==2){
+				return 2;	//user level
+                        }else{
+                            return 1;
+                        }
 		}else{
 			return 0; 		//login fail
 		}
