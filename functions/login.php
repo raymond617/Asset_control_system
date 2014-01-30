@@ -58,7 +58,7 @@ try
 		$_SESSION['email']=$api->getEmail();
 		$_SESSION['id']=$api->getId();*/
 		$_SESSION['approved'] = 1;
-		header("location: ./admin.php");
+		header("location: ../admin_page.php");
 	} else if ($api->checkIdPassword($_POST["id"],$_POST["password"])== 2) {
 		$teacher = new TeacherObject($_POST['id']);
 		$_SESSION['object'] = $teacher;

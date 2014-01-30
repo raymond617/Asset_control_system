@@ -9,8 +9,20 @@ class AssetObject{
 	private $labID;
 	private $dayB4alert;
 	private $arrayOfTimetable;
+        /*private $idT;
+	private $nameT;
+	private $typeT;
+	private $statusT;
+	private $labIDT;
+	private $dayB4alertT;
+	private $arrayOfTimetableT;*/
 	public function __construct(){
-		
+		/*$this->id=$this->idT;
+                $this->name=$this->nameT;
+                $this->type=$this->typeT;
+                $this->status=$this->statusT;
+                $this->labID=$this->labIDT;
+                $this->dayB4alert=$this->dayB4alertT;*/
 	}
 	public static function withID($id){
 		$instance = new self();
@@ -18,25 +30,26 @@ class AssetObject{
                 if($assetInfoArray != null){
                     setID($assetInfoArray[0]['asset_id']);
                     setName($assetInfoArray[0]['name']);
-                    setType($assetInfoArray[0]['type']);
+                    setTheType($assetInfoArray[0]['type']);
                     setStatus($assetInfoArray[0]['status']);
                     setLabID($assetInfoArray[0]['lab_id']);
                     setDayB4alert($assetInfoArray[0]['days_b4_alert']);
                     return $instance;
                 }
+                else return null;
 	}
 	public static function withRow(array $row){
 		$instance = new self();
-                $this->id=$row['assetID'];
-                $this->name=$row['name'];
-                $this->type=$row['type'];
-                $this->status=$row['status'];
-                $this->labID=$row['labID'];
-                $this->dayB4alert=$row['daysB4Alert'];
+                $instance->setID($row['assetID']);
+                $instance->setName($row['name']);
+                $instance->setTheType($row['type']);
+                $instance->setStatus($row['status']);
+                $instance->setLabID($row['labID']);
+                $instance->setDayB4alert($row['daysB4Alert']);
 		return $instance;
 	}
 	public function addAssetToDB(){
-		addAssets($this->id,$this->type,$this->status,$this->name,$this->dayB4alert,$this->labID);
+		return addAssets($this->getID(),$this->getTheType(),$this->getStatus(),$this->getName(),$this->getDayB4alert(),$this->getLabID());
 	}
         public function getID(){
             return $this->id;
@@ -50,10 +63,10 @@ class AssetObject{
         public function setName($aName){
             $this->name=$aName;
         }
-        public function getType(){
+        public function getTheType(){
             return $this->type;
         }
-        public function setType($aType){
+        public function setTheType($aType){
             $this->type=$aType;
         }
         public function getLabID(){

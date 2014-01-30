@@ -9,13 +9,27 @@ try {
             'type' => $_POST['type'],
             'daysB4Alert' => $_POST['days_b4_alert'],
                 'status'=>'U');
-        $assetOject = assetObject::withRow($assetGetArray);
-        if($assetOject->addAssetToDB() == true){
-            echo 'add asset success!';
-            header('Refresh: 3;url=add_assets.php');
+        try{
+        $assetOject = AssetObject::withRow($assetGetArray);
+        //echo $assetOject->getName();
+        }catch (Exception $e){
+            echo "Create object failed.\n";
+            //echo "getName fail";
+        }
+        try{
+            if($assetOject->addAssetToDB() == true){
+                echo 'add asset success!';
+                header('Refresh: 3;url=../add_assets.php');
+            }else{
+                echo 'add asset fail!\n May be deplicate asset id or lab id not exists';
+                header('Refresh: 3;url=../add_assets.php');
+            }
+        }catch (Exception $ee){
+            echo "addAssetToDB() Exception";
         }
     }
 } catch (Exception $e) {
+    echo "Exception.\n";
     exitWithHttpError(500);
 }
 function exitWithHttpError($error_code, $message = '') {

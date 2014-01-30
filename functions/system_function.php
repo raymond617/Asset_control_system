@@ -4,3 +4,6 @@ function checkLogined(){
 		return true;
 	}else return false;
 }
+function rootPath(){
+    return $_SERVER['DOCUMENT_ROOT']."/Asset_control_system/";
+}

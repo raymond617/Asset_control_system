@@ -4,7 +4,7 @@
 	session_start();
 	if (checkLogined()==true){
 		$object = $_SESSION['object'];
-		if($object->getUserLevel() == 2){
+		if($object->getUserLevel() == 3){
 ?>
 <!doctype html>
 <html>
@@ -44,7 +44,10 @@
 <?php 
 		}else{
 			echo "You have no authorize\n redirect in 3 seconds";
-			header('Refresh: 3;url=user_info.php');
+			header('Refresh: 3;url=index.php');
 		}
-	}
+        }else{
+            echo "You need login as an admin.";
+            header('Refresh: 3;url=index.php');
+        }
 ?>		
