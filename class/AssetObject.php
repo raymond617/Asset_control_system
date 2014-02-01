@@ -28,12 +28,12 @@ class AssetObject{
 		$instance = new self();
 		$assetInfoArray = getAssetsByID($id);
                 if($assetInfoArray != null){
-                    setID($assetInfoArray[0]['asset_id']);
-                    setName($assetInfoArray[0]['name']);
-                    setTheType($assetInfoArray[0]['type']);
-                    setStatus($assetInfoArray[0]['status']);
-                    setLabID($assetInfoArray[0]['lab_id']);
-                    setDayB4alert($assetInfoArray[0]['days_b4_alert']);
+                    $instance->setID($assetInfoArray[0]['asset_id']);
+                    $instance->setName($assetInfoArray[0]['name']);
+                    $instance->setTheType($assetInfoArray[0]['type']);
+                    $instance->setStatus($assetInfoArray[0]['status']);
+                    $instance->setLabID($assetInfoArray[0]['lab_id']);
+                    $instance->setDayB4alert($assetInfoArray[0]['days_b4_alert']);
                     return $instance;
                 }
                 else return null;
@@ -51,6 +51,9 @@ class AssetObject{
 	public function addAssetToDB(){
 		return addAssets($this->getID(),$this->getTheType(),$this->getStatus(),$this->getName(),$this->getDayB4alert(),$this->getLabID());
 	}
+        public function updateInfo($assetInfoArray){
+            return updateAsset($assetInfoArray['assetID'],$assetInfoArray['type'],$assetInfoArray['status'],$assetInfoArray['name'],$assetInfoArray['daysB4Alert'],$assetInfoArray['labID']);
+        }
         public function getID(){
             return $this->id;
         }

@@ -1,26 +1,19 @@
 <?php
-	require_once 'class/Objects.php';
-	require_once ('functions/system_function.php');
+	require_once ('../functions/system_function.php');
+        require_once (rootPath() . 'class/Objects.php');
 	session_start();
 	if (checkLogined()==true){
-		$object = $_SESSION['object'];
-		if($object->getUserLevel() == 3){
+		$adminObject = $_SESSION['object'];
+		if($adminObject->getUserLevel() == 3){
 ?>
 <!doctype html>
 <html>
 <head>
-<meta charset="UTF-8">
-<link rel="stylesheet" type="text/css" href=""/>
-<style  type="text/css">
-#loginOut{
-	float:right;
-}
-</style>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+ <link rel="stylesheet" type="text/css" href="../css/form_style.css"/>
 </head>
-
 <body>
-<?php include dirname(__FILE__)."/common_content/login_panel.php";	// div of login panel?>
-<form action="functions/assetsProcessor.php" method="post">
+<form action="../functions/assetsProcessor.php" method="post" id="add_asset">
 	<label for="labID">Laboratory ID:</label>
 	<input id="labID" name="labID" type="text" value="">
 	<label for="name">Asset name:</label>

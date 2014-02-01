@@ -1,8 +1,9 @@
 <?php
-
-require_once ('../class/assetObject.php');
+require_once ('../class/Objects.php');
+session_start();
+//require_once ('../class/assetObject.php');
 try {
-    if ($_POST['add_asset']) {
+    if (isset($_POST['add_asset'])) {
         $assetGetArray = array('labID' => $_POST['labID'],
             'name' => $_POST['name'],
             'assetID' => $_POST['assetID'],
@@ -10,13 +11,18 @@ try {
             'daysB4Alert' => $_POST['days_b4_alert'],
                 'status'=>'U');
         try{
-        $assetOject = AssetObject::withRow($assetGetArray);
-        //echo $assetOject->getName();
+            if($_SESSION['object']::addAsset($assetGetArray)){
+                echo 'add asset success!';
+                header('Refresh: 3;url=../edit_asset.php');
+            }else{
+                echo 'add asset fail!\n May be deplicate asset id or lab id not exists';
+                header('Refresh: 3;url=../edit_asset.php');
+            }
         }catch (Exception $e){
             echo "Create object failed.\n";
-            //echo "getName fail";
+        
         }
-        try{
+        /*try{
             if($assetOject->addAssetToDB() == true){
                 echo 'add asset success!';
                 header('Refresh: 3;url=../add_assets.php');
@@ -26,7 +32,27 @@ try {
             }
         }catch (Exception $ee){
             echo "addAssetToDB() Exception";
+        }*/
+    }else if(isset($_POST['edit_asset'])){
+        $assetInfoArray = array('labID' => $_POST['labID'],
+            'name' => $_POST['name'],
+            'assetID' => $_POST['assetID'],
+            'type' => $_POST['type'],
+            'daysB4Alert' => $_POST['days_b4_alert'],
+                'status'=>$_POST['status']);
+        try{
+            if($_SESSION['object']::updateAsset($assetInfoArray)){
+                echo 'edit asset success!';
+                header('Refresh: 3;url=../edit_asset.php');
+            }else{
+                echo 'edit asset fail!\n May be deplicate asset id or lab id not exists';
+                header('Refresh: 3;url=../edit_asset.php');
+            }
+        }catch (Exception $e){
+            echo "Create object failed.\n";
+        
         }
+        
     }
 } catch (Exception $e) {
     echo "Exception.\n";

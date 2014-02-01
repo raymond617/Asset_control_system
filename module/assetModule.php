@@ -25,3 +25,17 @@ function getAssetsByID($id){
         else
             return null;
 }
+function updateAsset($asset_id,$type,$status,$name,$days_b4_alert,$lab_id){
+    global $pdo;
+    $stmt = $pdo->prepare('update assets set type=? , status=?, name=?, days_b4_alert=? ,lab_id=? where asset_id = ?');
+    try{
+            if($stmt->execute(array($type,$status,$name,$days_b4_alert,$lab_id,$asset_id))==true){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(PDOException $e){
+            //echo $e;
+            return FALSE;
+        }
+}

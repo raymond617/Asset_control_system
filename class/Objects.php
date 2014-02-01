@@ -1,6 +1,7 @@
 <?php
 //require(__DIR__.'/../functions/connectDB.php');
 require_once ('/../functions/connectDB.php');
+require_once ('AssetObject.php');
 abstract class UserInfo{
 	//private $pdo;
 	private $email;
@@ -88,13 +89,49 @@ class AdminObject extends UserInfo{
 	public function __construct($id){
 		parent::__construct($id);
 	}
-	
-
+	public function addAsset($assetGetArray){
+            try{
+                $assetOject=AssetObject::withRow($assetGetArray);
+                if($assetOject->addAssetToDB()){
+                    return true;
+                }else{
+                    return false;
+                }
+            }catch(Exception $e){
+                echo "Create object failed.\n";
+            }
+        }
+        public function listAsset(){
+            $pdo = connectDB();
+            $stmt = $pdo->prepare('select * from assets');
+            $stmt->execute();
+            $assetInfoArray = $stmt->fetchAll();
+            return $assetInfoArray;
+        }
+        public function getAssetInfo($id){
+            $assetObject=AssetObject::withID($id);
+            return $assetObject;
+        }
+        public function updateAsset(array $assetInfoArray){
+            try{
+                $assetObject=AssetObject::withID($assetInfoArray['assetID']);
+                if($assetObject->updateInfo($assetInfoArray)){
+                    return true;
+                }else{
+                    return false;
+                }
+            }catch(Exception $e){
+                echo "Create object failed.\n";
+            }
+            
+            
+        }
 }
 class TeacherObject extends UserInfo{
 	public function __construct($id){
 		parent::__construct($id);
 	}
+        
 
 }
 class UserObject extends UserInfo{
