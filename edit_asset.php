@@ -82,11 +82,11 @@ if (checkLogined() == true) {
                 $assetInfoArray = $adminObject->listAsset();
                 ?>
                 <article>
-                    <form action="" method="post" class="" onSubmit="return confirm('Selected asset will be deleted. Are you sure?')">
+                    <form action="functions/assetsProcessor.php" method="post" class="" onSubmit="return confirm('Selected asset will be deleted. Are you sure?')">
                         <label for="Delete Asset">Action: </label>
                         <input type="submit" class="actionBtn" name="Delete Asset" value="Delete" id="delete_asset">
                         <a id="add_asset" class="fancybox" data-fancybox-type="iframe" href="forms/addAssetform.php" style="display:hidden;"></a>
-                        <input type="button" class="actionBtn" value="Add User" id="add_asset" onClick="callFancyBox(this.value);">
+                        <input type="button" class="actionBtn" value="Add Asset" id="add_asset" onClick="callFancyBox(this.value);">
                         <br>
                         <br>
                         <table>
@@ -103,7 +103,7 @@ if (checkLogined() == true) {
                             foreach ($assetInfoArray as $row) {
                                 ?>
                                 <tr>
-                                    <td class="narrowCol"><input type="checkbox" class="admin_mem_checkBox" name="row_selected[]" value="<?php echo $row['account_num'] ?>"></td>
+                                    <td class="narrowCol"><input type="checkbox" class="admin_mem_checkBox" name="row_selected[]" value="<?php echo $row['asset_id'] ?>"></td>
                                     <td><?php echo $row['asset_id'] ?></td>
                                     <td><?php echo $row['type'] ?></td>
                                     <td><?php echo $row['status'] ?></td>
@@ -112,8 +112,8 @@ if (checkLogined() == true) {
                                     <td><?php echo $row['lab_id'] ?></td>
 
                                     <td><a id="edit_asset" class="fancybox" data-fancybox-type="iframe" href="forms/editAssetform.php?asset_id=<?php echo $row['asset_id'] ?>">Edit</a>
-                                        <a class="fancybox" data-fancybox-type="iframe" href="delete.php?asset_id=<?php echo $row['asset_id'] ?>">Delete</a>
-                                        <input type="hidden" value="'.$row[''asset_id'].'" name="hidden_accNum"></td>
+                                        <a class="fancybox" data-fancybox-type="iframe" href="functions/assetsProcessor.php?delete_asset=true&asset_id=<?php echo $row['asset_id'] ?>">Delete</a>
+                                        </td>
                                 </tr>
                             <?php } ?>
                         </table>

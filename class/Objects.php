@@ -1,6 +1,7 @@
 <?php
 //require(__DIR__.'/../functions/connectDB.php');
 require_once ('/../functions/connectDB.php');
+require_once ('/../module/assetModule.php');
 require_once ('AssetObject.php');
 abstract class UserInfo{
 	//private $pdo;
@@ -99,6 +100,13 @@ class AdminObject extends UserInfo{
                 }
             }catch(Exception $e){
                 echo "Create object failed.\n";
+            }
+        }
+        public function deleteAsset($asset_id){
+            try{
+                return deleteAsset($asset_id);
+            }catch(Exception $e){
+                echo "delete object failed.\n";
             }
         }
         public function listAsset(){

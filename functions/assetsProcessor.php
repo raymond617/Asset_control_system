@@ -13,10 +13,10 @@ try {
         try{
             if($_SESSION['object']::addAsset($assetGetArray)){
                 echo 'add asset success!';
-                header('Refresh: 3;url=../edit_asset.php');
+                //header('Refresh: 3;url=../edit_asset.php');
             }else{
                 echo 'add asset fail!\n May be deplicate asset id or lab id not exists';
-                header('Refresh: 3;url=../edit_asset.php');
+                //header('Refresh: 3;url=../edit_asset.php');
             }
         }catch (Exception $e){
             echo "Create object failed.\n";
@@ -43,16 +43,40 @@ try {
         try{
             if($_SESSION['object']::updateAsset($assetInfoArray)){
                 echo 'edit asset success!';
-                header('Refresh: 3;url=../edit_asset.php');
+                //header('Refresh: 3;url=../edit_asset.php');
             }else{
                 echo 'edit asset fail!\n May be deplicate asset id or lab id not exists';
-                header('Refresh: 3;url=../edit_asset.php');
+                //header('Refresh: 3;url=../edit_asset.php');
             }
         }catch (Exception $e){
             echo "Create object failed.\n";
         
         }
         
+    }else if(isset($_GET['delete_asset'])){
+        $asset_id = $_GET['asset_id'];
+        try{
+            if($_SESSION['object']::deleteAsset($asset_id)){
+                echo 'Delete asset success!';
+            }else{
+                echo 'Delete asset fail!'; 
+            }
+        }catch (Exception $e){
+            echo 'Delete asset fail!';
+        }
+        
+    }else if(isset($_POST['row_selected'])){
+        $list_of_assets = $_POST['row_selected'];
+        try{
+            foreach($list_of_assets as $value){
+                $_SESSION['object']::deleteAsset($value);   
+            }
+                //echo 'delete assets success!';
+                header('Location:../edit_asset.php');
+        }catch (Exception $e){
+            //echo "Delete assets failed.\n";
+            header('Location:../edit_asset.php');
+        }
     }
 } catch (Exception $e) {
     echo "Exception.\n";

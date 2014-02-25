@@ -16,7 +16,19 @@ try {
         $end_time = $_POST['end_time'];        
         $student_id_list = $_POST['studID'];
         $asset_list = $_POST['asset'];
-        foreach ($student_id_list as $key){
+        try{
+            if(formSubmit($student_id_list, $asset_list, $project_title, $professor_id, $course_code, $bench,'l',$start_time,$end_time)==true){
+                echo 'Form submit success!';
+                header('Refresh: 3;url=../forms/experiment_reservation_form.php');
+            }else{
+                echo 'Form submit fail!<br> error occur.';
+                header('Refresh: 3;url=../forms/experiment_reservation_form.php');
+            }
+        }catch (Exception $e){
+            echo "Create object failed.\n";
+        
+        }
+        /*foreach ($student_id_list as $key){
             echo $key."<br>";
         }
         echo $start_time."<br>";
@@ -26,7 +38,7 @@ try {
         echo $ts_start."<br>";
         $ts_end=  strtotime($end_time);
         echo $ts_end."<br>";
-        
+        */
     }
 } catch (Exception $e) {
     echo "Exception.\n";
