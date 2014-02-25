@@ -39,3 +39,13 @@ function updateAsset($asset_id,$type,$status,$name,$days_b4_alert,$lab_id){
             return FALSE;
         }
 }
+function getBenchList(){
+    global $pdo;
+	$stmt = $pdo->prepare('SELECT asset_id,name FROM assets where type = ?');
+	$stmt->execute(array("bench"));
+	$benches = $stmt->fetchAll();
+        if(count($benches)>0)
+            return $benches;
+        else
+            return null;
+}

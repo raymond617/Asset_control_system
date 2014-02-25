@@ -17,26 +17,9 @@ if (checkLogined() == true) {
             input,label{
                 display:block;
             }
-            body{
-                        margin:0.5em auto;
-                        padding: 0.5em auto;
-                    }   
-                    form {
-                        font-family: Helvetica, Arial, sans-serif;                        
-                        margin:0.5em auto;
-                        padding: 0.5em auto;
-                    }
-                    label {
-                        min-width: 6.5em;
-                        margin-right: 1em;
-                        display: inline-block;
-                        text-align: left;
-                    }
-                    input {
-                        min-width: 9em;
-                        display: block;
-                        margin-bottom: 0.5em; 
-                    }
+            
+                    
+                    
                     .btn {
                         width: auto;
                     }
@@ -44,7 +27,8 @@ if (checkLogined() == true) {
         </head>
         <body>
             <header class="row">
-                <h1 id="site_logo">User profile</h1>
+                <h1 id="site_logo"><a href="">Laboratory asset tracking system</a></h1>
+                <h2 id="page_name">User profile</h2>
                 <?php include dirname(__FILE__) . "/common_content/login_panel.php"; // div of login panel?>
             </header>
             <div>

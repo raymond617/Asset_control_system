@@ -74,7 +74,8 @@ if (checkLogined() == true) {
             </head>
             <body>
                 <header class="row">
-                    <h1 id="site_logo">Asset Management</h1>
+                    <h1 id="site_logo"><a href="index.php">Laboratory asset tracking system</a></h1>
+                    <h2 id="page_name">Asset Management</h2>
                     <?php include dirname(__FILE__) . "/common_content/login_panel.php"; // div of login panel?>
                 </header>
                 <?php
