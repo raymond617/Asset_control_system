@@ -2,6 +2,8 @@
 //require(__DIR__.'/../functions/connectDB.php');
 require_once ('/../functions/connectDB.php');
 require_once ('/../module/assetModule.php');
+require_once ('/../module/FormModule.php');
+require_once ('/../module/UserModule.php');
 require_once ('AssetObject.php');
 abstract class UserInfo{
 	//private $pdo;
@@ -131,8 +133,22 @@ class AdminObject extends UserInfo{
             }catch(Exception $e){
                 echo "Create object failed.\n";
             }
-            
-            
+        }
+        public function listForms(){
+            return listAllForms();
+        }
+        public function getFormInfo($form_id){
+            return showOneFormDetail($form_id);
+        }
+        public function deleteForm($form_id){
+            try{
+                return deleteFormM($form_id);
+            }catch(Exception $e){
+                echo "delete form failed.\n";
+            }
+        }
+        public function getProfessorName($prof_id){
+            return getProfessorNameM($prof_id);
         }
 }
 class TeacherObject extends UserInfo{

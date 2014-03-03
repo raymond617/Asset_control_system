@@ -39,6 +39,18 @@ try {
         $ts_end=  strtotime($end_time);
         echo $ts_end."<br>";
         */
+    }else if(isset($_POST['row_selected'])){
+        $list_of_forms = $_POST['row_selected'];
+        try{
+            foreach($list_of_assets as $value){
+                $_SESSION['object']::deleteAsset($value);   
+            }
+                //echo 'delete assets success!';
+                header('Location:../edit_asset.php');
+        }catch (Exception $e){
+            //echo "Delete assets failed.\n";
+            header('Location:../edit_asset.php');
+        }
     }
 } catch (Exception $e) {
     echo "Exception.\n";

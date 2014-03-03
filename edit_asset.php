@@ -58,8 +58,11 @@ if (checkLogined() == true) {
                     th {
                         border-bottom: 0.3em solid #1A7480;
                     }
-                    .narrowCol {
-                        min-width: 2.5em;
+                    .narrowCol,.admin_mem_checkBox {
+                        min-width: 3em;
+                    }
+                    .narrowCol input,.admin_mem_checkBox input{
+                        min-width: 3em;
                     }
                     .wideCol {
                         min-width: 12em;
