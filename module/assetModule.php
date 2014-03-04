@@ -69,3 +69,18 @@ function getBenchList() {
     else
         return null;
 }
+function getAssetTypesM(){
+    global $pdo;
+    $stmt = $pdo->prepare('SELECT DISTINCT type FROM assets');
+    $stmt->execute();
+    $types = $stmt->fetchAll();
+    return $types;
+}
+function getAssetByTypes($types){
+    global $pdo;
+    $stmt = $pdo->prepare('SELECT * FROM assets where type = ?');
+    $stmt->execute(array($types));
+    $assets = $stmt->fetchAll();
+    return $assets;
+}
+

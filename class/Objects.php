@@ -74,6 +74,9 @@ abstract class UserInfo{
 	public function getUserLevel(){
 	return $this->user_level;
 	}
+        public function getAssetTypes(){
+            return getAssetTypesM();
+        }
 	
 }
 /////////////////////////////

@@ -24,6 +24,7 @@ if (isset($_SESSION['approved']) && $_SESSION['approved'] == 1) {
                 }
                 #reservation_form{
                     width:800px;
+                    min-height: 960px;
                 }
                 select{
                     display:block;
@@ -47,11 +48,11 @@ if (isset($_SESSION['approved']) && $_SESSION['approved'] == 1) {
                 <input id="project_title" name="project_title" type="text" value="">
                 <label for="professor_id">Professor ID:</label>
                 <input id="professor_id" name="professor_id" type="text" value="">
-                <!--<input id="student_name" name="student_name[]" type="hidden" value="<?php //echo $object->getUserName(); ?>">
-                <input id="studID" name="studID[]" type="hidden" value="<?php //echo $object->getID(); ?>">-->
+                <!--<input id="student_name" name="student_name[]" type="hidden" value="<?php //echo $object->getUserName();  ?>">
+                <input id="studID" name="studID[]" type="hidden" value="<?php //echo $object->getID();  ?>">-->
                 <div id="p_scents">
                     <p><label for="student_name">Name of student &AMP; student ID:  <a href="#" id="addScnt">Add another student</a><input id="student_name" name="student_name[]" type="text" value="<?php echo $object->getUserName(); ?>" readonly><input id="studID" name="studID[]" type="text" value="<?php echo $object->getID(); ?>" readonly></label>
-                        </p> 
+                    </p> 
                 </div>
 
                 <label for="course_code">Course code:</label>
@@ -103,8 +104,18 @@ if (isset($_SESSION['approved']) && $_SESSION['approved'] == 1) {
                 ?>
                 </select>-->
                 <div id="asset_list">
-                    <p><label for="asset">Asset ID:  <a href="#" id="addAsset">Add another asset</a><input id="asset" name="asset[]" type="text" value=""></label></p>
-                         
+                    <p><label for="asset">Asset ID:  <a href="#" id="addAsset">Add another asset</a>
+                            <select name="type" id="assetType" onchange="getAssetByType(this,'#asset1');">
+                                <option selected="selected">select a type</option>
+                                <?php $types = $_SESSION['object']->getAssetTypes();
+                                foreach ($types as $value) {
+                                    ?>
+                                    <option value="<?php echo $value['type']; ?>"><?php echo $value['type']; ?></option>
+                                <?php } ?>
+                            </select>
+                            <select name="asset[]" id="asset1" ></select>
+                            <!--<input id="asset1" name="asset[]" type="text" value=""></label></p>-->
+
                 </div>
                 <input id="action" name="experiment_reservation" type="hidden" value="true">
                 <input id="form_submit" type="submit" value="submit form">
@@ -118,72 +129,99 @@ if (isset($_SESSION['approved']) && $_SESSION['approved'] == 1) {
         <script type="text/javascript" src="../javascript/bootstrap.min.js"></script>
         <script type="text/javascript" src="../javascript/bootstrap-datetimepicker.js" charset="UTF-8"></script>
         <script>
-            $(window).load(function() {
-                $(function() {
-                    var scntDiv = $('#p_scents');
-                    var i = $('#p_scents p').size() + 1;
+                            $(window).load(function() {
+                                $(function() {
+                                    var scntDiv = $('#p_scents');
+                                    var i = $('#p_scents p').size() + 1;
 
-                    $('#addScnt').live('click', function() {
-                        $('<p><label for="student_name"><a href="#" id="remScnt">Remove</a><input id="student_name" name="student_name[]" type="text" value="" placeholder="Name"/><input id="studID" name="studID[]" type="text" value="" placeholder="Student id"></label></p>').appendTo(scntDiv);
-                        i++;
-                        return false;
-                    });
+                                    $('#addScnt').live('click', function() {
+                                        $('<p><label for="student_name"><a href="#" id="remScnt">Remove</a><input id="student_name" name="student_name[]" type="text" value="" placeholder="Name"/><input id="studID" name="studID[]" type="text" value="" placeholder="Student id"></label></p>').appendTo(scntDiv);
+                                        i++;
+                                        return false;
+                                    });
 
-                    $('#remScnt').live('click', function() {
-                        if (i > 2) {
-                            $(this).parents('p').remove();
-                            i--;
-                        }
-                        return false;
-                    });
-                });
-            });
-            $(window).load(function() {
-                $(function() {
-                    var scntDiv = $('#asset_list');
-                    var i = $('#asset_list p').size() + 1;
+                                    $('#remScnt').live('click', function() {
+                                        if (i > 2) {
+                                            $(this).parents('p').remove();
+                                            i--;
+                                        }
+                                        return false;
+                                    });
+                                });
+                            });
+                            $(window).load(function() {
+                                $(function() {
+                                    var scntDiv = $('#asset_list');
+                                    var i = $('#asset_list p').size() + 1;
 
-                    $('#addAsset').live('click', function() {
-                        $('<p><label for="asset"><a href="#" id="remAsset">Remove</a><input id="asset" name="asset[]" type="text" value="" placeholder="Name"/></label></p>').appendTo(scntDiv);
-                        i++;
-                        return false;
-                    });
+                                    $('#addAsset').live('click', function() {
+                                        $('<p><label for="asset"><a href="#" id="remAsset">Remove</a><select name="type" onchange="getAssetByType(this,\'#asset'+i+'\');"><option selected="selected">select a type</option><?php foreach ($types as $value) {
+        echo '<option value="' . $value['type'] . '">' . $value['type'] . '</option>';
+    } ?></select><select name="asset[]" id="asset'+i+'" ></select></label></p>').appendTo(scntDiv);
+                                        i++;
+                                        return false;
+                                    });
 
-                    $('#remAsset').live('click', function() {
-                        if (i > 2) {
-                            $(this).parents('p').remove();
-                            i--;
-                        }
-                        return false;
-                    });
-                });
-            });
+                                    $('#remAsset').live('click', function() {
+                                        if (i > 2) {
+                                            $(this).parents('p').remove();
+                                            i--;
+                                        }
+                                        return false;
+                                    });
+                                });
+                            });
 
-            $('.form_datetime').datetimepicker({
-                //language:  'fr',
-                weekStart: 1,
-                //todayBtn: 1,
-                autoclose: 1,
-                todayHighlight: 1,
-                startView: 2,
-                forceParse: 0,
-                showMeridian: 1,
-                minuteStep: 30,
-                startDate: new Date()
-            });
-            /*$(function() {
-             $("#datepicker").datepicker();
-             });*/
-             function checkTime(){
-                var startTime= document.getElementById('start_time');
-                var endTime = document.getElementById('end_time');
-                var startT = new Date(startTime.value.split(' ').join('T')).getTime()/1000;
-                var endT = new Date(endTime.value.split(' ').join('T')).getTime()/1000;
-                if(endT <= startT)
-                   $("#end_time").css({'background-color': 'red'});
-             }
+                            $('.form_datetime').datetimepicker({
+                                //language:  'fr',
+                                weekStart: 1,
+                                //todayBtn: 1,
+                                autoclose: 1,
+                                todayHighlight: 1,
+                                startView: 2,
+                                forceParse: 0,
+                                showMeridian: 1,
+                                minuteStep: 30,
+                                startDate: new Date()
+                            });
+                            /*$(function() {
+                             $("#datepicker").datepicker();
+                             });*/
+                            function checkTime() {
+                                var startTime = document.getElementById('start_time');
+                                var endTime = document.getElementById('end_time');
+                                var startT = new Date(startTime.value.split(' ').join('T')).getTime() / 1000;
+                                var endT = new Date(endTime.value.split(' ').join('T')).getTime() / 1000;
+                                if (endT <= startT)
+                                    $("#end_time").css({'background-color': 'red'});
+                            }
         </script>
-    </script>
+        <script>
+            /*$("#assetType").change(function() {
+                $.ajax({type:"GET",
+                        url: "../ajax/getAssetByType.php",
+                        data: "assetType_selectedvalue="+$(this).val(),
+                        success: function() {
+                            alert("success");
+                }});
+            });*/
+            function getAssetByType(self,targetID){
+                var type = 'type='+$(self).val();
+                //alert(type);
+                $.ajax({type:"GET",
+                        url: "../ajax/getAssetByType.php",
+                        data: type,
+                        success: function(msg) {
+                            //alert(msg);
+                            $(targetID).html(msg);
+                        },
+                        error: function () {
+                            alert("An error ocurred.");
+                        }
+                });
+            }
+            
+        </script>
     </html>
     <?php
 } else {

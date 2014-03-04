@@ -13,10 +13,11 @@ if (checkLogined() == true) {
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
                 <link rel="stylesheet" type="text/css" href="../css/form_style.css"/>
-
+                <link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
+                <link href="../css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
             </head>
             <body>
-                <form action="../functions/FormProcessor.php" method="post" id="edit_form">
+                <form action="../functions/FormProcessor.php" method="post" id="edit_appl_form">
                     <label for="formID">Form ID:</label>
                     <input id="formID" name="formID" type="text" value="<?php echo $formInfo['form_id'] ?>" readonly>
                     <label for="project_title">Project title:</label>
@@ -39,7 +40,7 @@ if (checkLogined() == true) {
                         <option value="3">Approved</option>
                     </select> 
 
-                    <input id="action" name="edit_form" type="hidden" value="true">
+                    <input id="action" name="edit_appl_form" type="hidden" value="true">
 
                     <input id="submit" type="submit" value="Edit Form">
                 </form>
