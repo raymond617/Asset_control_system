@@ -3,8 +3,8 @@ require_once 'class/Objects.php';
 require_once ('functions/system_function.php');
 session_start();
 if (checkLogined() == true) {
-    $adminObject = $_SESSION['object'];
-    if ($adminObject->getUserLevel() == 2) {
+    $Object = $_SESSION['object'];
+    if ($Object->getUserLevel() == 2 ||$Object->getUserLevel() == 3) {
         ?>
         <!doctype html>
         <html>
@@ -82,42 +82,36 @@ if (checkLogined() == true) {
                     <?php include dirname(__FILE__) . "/common_content/login_panel.php"; // div of login panel?>
                 </header>
                 <?php
-                $formInfoArray = $adminObject->listForms();
+                if($Object->getUserLevel() == 2){
+                    $formInfoArray = $Object->listFormsWithStatus(1);
+                }else if($Object->getUserLevel() == 3){
+                    $formInfoArray = $Object->listFormsWithStatus(2);
+                }
                 ?>
                 <article>
-                    <form action="functions/FormProcessor.php" method="post" class="" onSubmit="return confirm('Selected forms will be deleted. Are you sure?')">
-                        <label for="Delete Form">Action: </label>
-                        <input type="submit" class="actionBtn" name="Delete Form" value="Delete" id="delete_form">
-                        <a id="add_form" class="fancybox" data-fancybox-type="iframe" href="forms/experiment_reservation_form.php" style="display:hidden;"></a>
-                        <input type="button" class="actionBtn" value="Add Form" id="add_form" onClick="callFancyBox(this.value);">
-                        <br>
-                        <br>
                         <table>
                             <tr>
-                                <th><input type="checkbox" class="admin_mem_checkBox" name="all" onClick="check_all(this, 'row_selected[]')"></th>
                                 <th>Apply Time</th>
                                 <th>Project title</th>
                                 <th>Student IDs</th>
                                 <th>Bench</th>
                                 <th>Start time</th>
                                 <th>End time</th>
+                                <th>Status</th>
                             </tr>
                             <?php
                             foreach ($formInfoArray as $row) {
                                 ?>
-                            
                                 <tr>    
-                                    <td class="narrowCol"><input type="checkbox" class="admin_mem_checkBox" name="row_selected[]" value="<?php echo $row['form_id'] ?>"></td>
                                     <td><?php echo $row['apply_timestamp'] ?></td>
                                     <td><?php echo $row['project_title'] ?></td>
                                     <td><?php foreach($row['user_array'] as $value) echo $value['id'].'<br>' ?></td>
                                     <td><?php echo "ID:".$row['bench'][0]['asset_id']."  Name:".$row['bench'][0]['name'] ?></td>
                                     <td><?php echo $row['bench'][0]['start_time'] ?></td>
                                     <td><?php echo $row['bench'][0]['end_time'] ?></td>
-
+                                    <td><?php echo $row['status'] ?></td>
                                     <td>
-                                        <a class="fancybox" data-fancybox-type="iframe" href="forms/editApplForm.php?form_id=<?php echo $row['form_id'] ?>">Detail &AMP; Edit</a>
-                                        <a class="fancybox" data-fancybox-type="iframe" href="functions/FormProcessor.php?delete_form=true&form_id=<?php echo $row['form_id'] ?>">Delete</a>
+                                        <a class="fancybox" data-fancybox-type="iframe" href="forms/formEditAndApprove.php?form_id=<?php echo $row['form_id'] ?>">Detail &AMP; Edit</a>
                                         
                                         </td>
                                 </tr>

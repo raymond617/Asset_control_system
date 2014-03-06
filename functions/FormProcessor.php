@@ -51,6 +51,30 @@ try {
             //echo "Delete assets failed.\n";
             header('Location:../edit_asset.php');
         }
+    }else if(isset($_POST['form_approve'])){
+        $form_id = $_POST['formID'];
+        //$student_id_list = $_POST['studID'];
+        $project_title = $_POST['project_title'];
+        //$appl_time = $_POST['appl_time'];
+        $course_code = $_POST['course_code'];
+        //$professor_id = $_POST['professor_id'];
+        $asset_list = $_POST['asset'];
+        $status = $_POST['status'];
+        $bench = $_POST['bench'];
+        $start_time = $_POST['start_time'];
+        $end_time = $_POST['end_time'];  
+        try{
+            if(edit_and_approveForm($form_id,$project_title,$course_code,$asset_list,$status,$bench,$start_time,$end_time)==TRUE){
+                echo 'Form approve success!';
+                header('Refresh: 3;url=../form_approve_management.php');
+            }else{
+                echo 'Form approve fail!<br> error occur.';
+                header('Refresh: 3;url=../form_approve_management.php');
+            }
+        }catch (Exception $e){
+            echo "module process fail\n";
+        
+        }
     }
 } catch (Exception $e) {
     echo "Exception.\n";

@@ -68,8 +68,8 @@ if (isset($_SESSION['approved']) && $_SESSION['approved'] == 1) {
                 </select>
                 <div class="control-group">
                     <label class="control-label">Start time:</label>
-                    <div class="controls input-append date form_datetime" data-date="" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="dtp_input1">
-                        <input size="16" type="text" value="" name="start_time" id="start_time" readonly>
+                    <div class="controls input-append date form_datetime" data-date="" data-link-field="dtp_input1">
+                        <input size="16" type="text" value="" name="start_time" id="start_time" readonly onchange="checkTime()">
                         <span class="add-on"><i class="icon-remove"></i></span>
                         <span class="add-on"><i class="icon-th"></i></span>
                     </div>
@@ -77,43 +77,25 @@ if (isset($_SESSION['approved']) && $_SESSION['approved'] == 1) {
                 </div>
                 <div class="control-group">
                     <label class="control-label">End time:</label>
-                    <div class="controls input-append date form_datetime" data-date="" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="dtp_input1">
+                    <div class="controls input-append date form_datetime" data-date="" data-link-field="dtp_input1">
                         <input size="16" type="text" value="" name="end_time"  id="end_time" readonly onchange="checkTime()">
                         <span class="add-on"><i class="icon-remove"></i></span>
                         <span class="add-on"><i class="icon-th"></i></span>
                     </div>
                     <input type="hidden" id="dtp_input2" value="" /><br/>
                 </div>
-                <!--<label for="datepicker">Select the date</label>
-                <input type="text" id="datepicker" name="datepicker">
-                <label for="start_time">Start time</label>
-                <select name="start_time" id="start_time">
-                <?php /*
-                  $timeslot = array("08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00");
-                  foreach($timeslot as $x){
-                  echo ("<option value='" . $x . "'>" . $x . "</option>");
-                  } */
-                ?>
-                </select>
-                <label for="end_time">End time</label>
-                <select name="end_time" id="end_time">
-                <?php /*
-                  foreach($timeslot as $x){
-                  echo ("<option value='" . $x . "'>" . $x . "</option>");
-                  } */
-                ?>
-                </select>-->
                 <div id="asset_list">
-                    <p><label for="asset">Asset ID:  <a href="#" id="addAsset">Add another asset</a>
-                            <select name="type" id="assetType" onchange="getAssetByType(this,'#asset1');">
+                    <?php $types = $_SESSION['object']->getAssetTypes();?>
+                    <p><label for="assetType">Asset Type &AMP; Name:  <a href="#" id="addAsset">Add another asset</a>
+                            <select name="type[]" id="assetType" onchange="getAssetByType(this,'#asset1');">
                                 <option selected="selected">select a type</option>
-                                <?php $types = $_SESSION['object']->getAssetTypes();
+                                <?php 
                                 foreach ($types as $value) {
                                     ?>
                                     <option value="<?php echo $value['type']; ?>"><?php echo $value['type']; ?></option>
                                 <?php } ?>
                             </select>
-                            <select name="asset[]" id="asset1" ></select>
+                            <select name="asset[]" id="asset1" ></select></label></p>
                             <!--<input id="asset1" name="asset[]" type="text" value=""></label></p>-->
 
                 </div>
@@ -155,7 +137,7 @@ if (isset($_SESSION['approved']) && $_SESSION['approved'] == 1) {
                                     var i = $('#asset_list p').size() + 1;
 
                                     $('#addAsset').live('click', function() {
-                                        $('<p><label for="asset"><a href="#" id="remAsset">Remove</a><select name="type" onchange="getAssetByType(this,\'#asset'+i+'\');"><option selected="selected">select a type</option><?php foreach ($types as $value) {
+                                        $('<p><label for="asset"><a href="#" id="remAsset">Remove</a><select name="type[]" onchange="getAssetByType(this,\'#asset'+i+'\');"><option selected="selected">select a type</option><?php foreach ($types as $value) {
         echo '<option value="' . $value['type'] . '">' . $value['type'] . '</option>';
     } ?></select><select name="asset[]" id="asset'+i+'" ></select></label></p>').appendTo(scntDiv);
                                         i++;
@@ -182,6 +164,7 @@ if (isset($_SESSION['approved']) && $_SESSION['approved'] == 1) {
                                 forceParse: 0,
                                 showMeridian: 1,
                                 minuteStep: 30,
+                                format: 'yyyy-mm-dd hh:ii:00',
                                 startDate: new Date()
                             });
                             /*$(function() {
@@ -220,7 +203,28 @@ if (isset($_SESSION['approved']) && $_SESSION['approved'] == 1) {
                         }
                 });
             }
-            
+            $("#end_time").change(function() {
+                $.ajax({type:"GET",
+                        url: "../ajax/checkTimeOverlapping.php",
+                        data: "end_time="+$(this).val()+"&start_time="+$("#start_time").val()+"&bench_id="+$("#bench").val(),
+                        success: function(result) {
+                            //alert(result);
+                            if(result === "success")
+                                alert("OK");
+                            else
+                                alert("overlapping");
+                }});
+            });
+            $("#start_time").change(function() {
+                $.ajax({type:"GET",
+                        url: "../ajax/checkTimeOverlapping.php",
+                        data: "end_time="+$("#end_time").val()+"&start_time="+$(this).val()+"&bench_id="+$("#bench").val(),
+                        success: function(result) {
+                            //alert(result);
+                            if(result !== "success")
+                                alert("overlapping");
+                }});
+            });
         </script>
     </html>
     <?php

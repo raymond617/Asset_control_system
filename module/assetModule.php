@@ -83,4 +83,16 @@ function getAssetByTypes($types){
     $assets = $stmt->fetchAll();
     return $assets;
 }
+function getBenchTimesList($id,$status){
+    global $pdo;
+    $stmt = $pdo->prepare('SELECT start_time, end_time
+FROM `form_r_asset` f, assets a
+WHERE f.status =?
+AND a.type = "bench"
+AND f.asset_id =?
+AND a.asset_id = f.asset_id');
+    $stmt->execute(array($status,$id));
+    $benchTimeList = $stmt->fetchAll();
+    return $benchTimeList;
+}
 

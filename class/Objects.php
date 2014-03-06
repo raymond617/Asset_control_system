@@ -77,7 +77,9 @@ abstract class UserInfo{
         public function getAssetTypes(){
             return getAssetTypesM();
         }
-	
+        public function getAssetByType($type){
+            return getAssetByTypes($type);
+        }
 }
 /////////////////////////////
 /*
@@ -153,13 +155,23 @@ class AdminObject extends UserInfo{
         public function getProfessorName($prof_id){
             return getProfessorNameM($prof_id);
         }
+        public function listFormsWithStatus($status){
+            return listAllFormsWithStatus($status);
+        }
 }
 class TeacherObject extends UserInfo{
 	public function __construct($id){
 		parent::__construct($id);
 	}
-        
-
+        public function listFormsWithStatus($status){
+            return listAllFormsWithStatus($status);
+        }
+        public function getFormInfo($form_id){
+            return showOneFormDetail($form_id);
+        }
+        public function getProfessorName($prof_id){
+            return getProfessorNameM($prof_id);
+        }
 }
 class UserObject extends UserInfo{
 	public function __construct($id){

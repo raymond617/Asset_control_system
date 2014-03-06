@@ -34,6 +34,7 @@ session_start();
                 ?>
                 <ul>
                     <li><a href="forms/experiment_reservation_form.php">Reserve an experiment</a></li>
+                    <li><a href="form_approve_management.php">Approve forms</a></li>
                 </ul>
             <?php 
             

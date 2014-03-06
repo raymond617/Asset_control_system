@@ -5,7 +5,7 @@ require_once (rootPath() . 'module/assetModule.php');
 session_start();
 if (checkLogined() == true) {
     $Object = $_SESSION['object'];
-    if ($Object->getUserLevel() == 3) {
+    if ($Object->getUserLevel() == 2 || $Object->getUserLevel() == 3) {
         $currentFormID = $_GET['form_id'];
         $formInfo = $_SESSION['object']->getFormInfo($currentFormID);
         ?>
@@ -119,9 +119,14 @@ if (checkLogined() == true) {
                     <label for="status">Status:</label>
                         <?php $status = $formInfo['status']; ?>
                     <select name="status" form="prof_form_approve" id="status">
-                        <option value="3">Approved</option>
-                        <option value="2">Wait for technician's approval</option>
-                        <option value="1">Wait for professor's approval</option>
+
+                        <?php if ($Object->getUserLevel() == 2) { ?>
+                            <option value="2">Approved</option>
+                            <option value="1">Wait for professor's approval</option>
+                        <?php } else if ($Object->getUserLevel() == 3) { ?>
+                            <option value="3">Approved</option>
+                            <option value="2">Wait for technician's approval</option>
+        <?php } ?>
                         <option value="9">Rejected</option>
                     </select> 
 

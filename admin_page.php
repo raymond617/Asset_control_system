@@ -22,6 +22,7 @@ if (checkLogined() == true && $_SESSION['object']->getUserLevel() == 3) {
                 <li><a href="edit_asset.php">Asset management</a></li>
                 <li><a href="forms/experiment_reservation_form.php">Reserve an experiment</a></li>
                 <li><a href="form_management.php">Form management</a></li>
+                <li><a href="form_approve_management.php">Approve forms</a></li>
             </ul>
 
         </body>

@@ -101,6 +101,7 @@ if (checkLogined() == true) {
                                 <th>Bench</th>
                                 <th>Start time</th>
                                 <th>End time</th>
+                                <th>Status</th>
                             </tr>
                             <?php
                             foreach ($formInfoArray as $row) {
@@ -114,7 +115,7 @@ if (checkLogined() == true) {
                                     <td><?php echo "ID:".$row['bench'][0]['asset_id']."  Name:".$row['bench'][0]['name'] ?></td>
                                     <td><?php echo $row['bench'][0]['start_time'] ?></td>
                                     <td><?php echo $row['bench'][0]['end_time'] ?></td>
-
+                                    <td><?php echo $row['status'] ?></td>
                                     <td>
                                         <a class="fancybox" data-fancybox-type="iframe" href="forms/editApplForm.php?form_id=<?php echo $row['form_id'] ?>">Detail &AMP; Edit</a>
                                         <a class="fancybox" data-fancybox-type="iframe" href="functions/FormProcessor.php?delete_form=true&form_id=<?php echo $row['form_id'] ?>">Delete</a>
@@ -154,7 +155,7 @@ if (checkLogined() == true) {
         header('Refresh: 3;url=index.php');
     }
 } else {
-    echo "You need login as an admin.";
+    echo "You need login as a professor.";
     header('Refresh: 3;url=index.php');
 }
 ?>		
