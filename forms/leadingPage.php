@@ -5,7 +5,8 @@ require_once (rootPath() . 'module/assetModule.php');
 session_start();
 if (checkLogined() == true) {
     $Object = $_SESSION['object'];
-    if ($Object->getUserLevel() == 2 || $Object->getUserLevel() == 3) {
+    if ($Object->getUserLevel() == 3) {
+        if(isset($_GET['form_id'])){
         $currentFormID = $_GET['form_id'];
         $formInfo = $_SESSION['object']->getFormInfo($currentFormID);
         ?>
@@ -46,92 +47,35 @@ if (checkLogined() == true) {
                     <input id="professor_id" name="professor_id" type="hidden" value="<?php echo $formInfo['prof_id']; ?>" >
                     <input id="professor" name="professor" type="text" value="<?php echo $_SESSION['object']->getProfessorName($formInfo['prof_id'])[0][0]; ?>" disabled="disabled">
                     <label for="bench">Bench:</label>
-                    <select name="bench" id="bench" onchange="clearTime();">
-                    <?php
-                    $benches = getBenchList();
-                    foreach ($benches as $b) {
-                        if(strcmp($b['asset_id'],$formInfo['bench'][0]['asset_id'])){
-                            echo "<option value='" . $b['asset_id'] . "' selected>" . $b['name'] . "</option>";
-                        }else{
-                            echo "<option value='" . $b['asset_id'] . "'>" . $b['name'] . "</option>";
-                        }
-                    }
-                    ?>
-                </select>
+                    <input id="bench" name="bench" value="<?php echo $b['asset_id']?>" type="hidden">
+                    <input id="bench" name="bench" value="<?php echo $b['name']?>" disabled type="text">
                     <div class="control-group">
-                        <label class="control-label">Start time:</label>
-                        <div class="controls input-append date form_datetime" data-date="" data-link-field="dtp_input1">
-                            <input size="16" type="text" value="<?php echo $formInfo['bench'][0]['start_time'] ?>" name="start_time" id="start_time" readonly onchange="checkTime()">
-                            <span class="add-on"><i class="icon-remove"></i></span>
-                            <span class="add-on"><i class="icon-th"></i></span>
-                        </div>
-                        <input type="hidden" id="dtp_input1" value="" /><br/>
+                        <label for="start_time">Start time:</label>
+                            <input size="16" type="text" value="<?php echo $formInfo['bench'][0]['start_time'] ?>" name="start_time" id="start_time" readonly>
                     </div>
                     <div class="control-group">
-                        <label class="control-label">End time:</label>
-                        <div class="controls input-append date form_datetime" data-date="" data-link-field="dtp_input1">
-                            <input size="16" type="text" value="<?php echo $formInfo['bench'][0]['end_time'] ?>" name="end_time"  id="end_time" readonly onchange="checkTime()">
-                            <span class="add-on"><i class="icon-remove"></i></span>
-                            <span class="add-on"><i class="icon-th"></i></span>
-                        </div>
-                        <input type="hidden" id="dtp_input2" value="" /><br/>
+                        <label for="end_time">End time:</label>
+                            <input size="16" type="text" value="<?php echo $formInfo['bench'][0]['end_time'] ?>" name="end_time"  id="end_time" readonly>
                     </div>
-                    <div id="asset_list">
-                        <?php $types = $_SESSION['object']->getAssetTypes(); ?>
-                        <label for="assets">Assets Type &amp; Name:</label> <a href="#" id="addAsset">Add another asset</a>
-                            <?php
+                    
+                        <label>Assets Type , Name , ID:</label>
+                        <?php
                             $i = 1;
                             foreach ($formInfo['asset_array'] as $value) {
-                                ?>
-                                <p><label for='assetType<?php echo $i; ?>'><?php echo $i; ?></label><a href="#" id="remAsset">Remove</a>
-                                <select name="type[]" id="assetType<?php echo $i; ?>" onchange="getAssetByType(this, '#asset<?php echo $i; ?>');">
-                                    <?php
-                                    foreach ($types as $x) {
-                                        if (strcmp($x['type'], $value['type']) == 0) {
-                                            ?>
-                                            <option value="<?php echo $x['type']; ?>" selected><?php echo $x['type']; ?></option>
-                                        <?php } else { ?>
-                                            <option value="<?php echo $x['type']; ?>"><?php echo $x['type']; ?></option>
-                                            <?php
-                                        }
-                                    }
-                                    ?>
-                                </select>
-                                <?php $assets = $_SESSION['object']->getAssetByType($value['type']); ?>
-                                <select name="asset[]" id="asset<?php echo $i; ?>">
-                                    <?php
-                                    foreach ($assets as $y) {
-                                        if (strcmp($y['name'], $value['name']) == 0) {
-                                            ?>
-                                            <option value="<?php echo $y['asset_id'] ?>" selected><?php echo $y['name'] ?></option>
-                                        <?php } else { ?>
-                                            <option value="<?php echo $y['asset_id'] ?>"><?php echo $y['name'] ?></option>
-                                        <?php
-                                        }
-                                    }
-                                    ?>
-                                </select></p>
-                            <?php
-                            $i++;
-                        }
                         ?>
-                    </div>
+                        <label><?php echo $i;?></label>
+                        <input type="text" value="<?php echo $value['type'];?>" readonly>
+                        <input type="text" value="<?php echo $value['name']?>" readonly>
+                        <input type="text" name="asset[]" value="<?php echo $value['asset_id']?>" >
+                        <?php
+                            $i++;}
+                        ?>
                     <label for="status">Status:</label>
                         <?php $status = $formInfo['status']; ?>
                     <select name="status" form="prof_form_approve" id="status">
-
-                        <?php if ($Object->getUserLevel() == 2) { ?>
-                            <option value="2">Approved</option>
-                            <option value="1">Wait for professor's approval</option>
-                        <?php } else if ($Object->getUserLevel() == 3) { ?>
-                            <option value="3">Approved</option>
-                            <option value="2">Wait for technician's approval</option>
-        <?php } ?>
-                        <option value="9">Rejected</option>
+                        <option value="4">Lent</option>
                     </select> 
-
-                    <input id="action" name="form_approve" type="hidden" value="true">
-
+                    <input id="action" name="lent" type="hidden" value="true">
                     <input id="submit" type="submit" value="Submit Form">
                 </form>
             </body>
@@ -266,6 +210,9 @@ if (checkLogined() == true) {
             </script>
         </html>
         <?php
+        }else{
+            
+        }
     } else {
         echo "You have no authorize\n redirect in 3 seconds";
         header('Refresh: 3;url=index.php');

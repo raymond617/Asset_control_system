@@ -153,7 +153,7 @@ function edit_and_approveForm($form_id,$project_title,$course_code,$asset_array,
     global $pdo;
     $count =0;
     $stmt = $pdo->prepare('update appl_form set project_title = ?,course_code=?,status=? where form_id =?');
-    $stmt2 =$pdo->prepare('DELETE FORM form_r_asset where form_id = ?');
+    $stmt2 =$pdo->prepare('DELETE From form_r_asset where form_id = ? AND asset_id IN (SELECT asset_id from assets)');
     $stmt3 = $pdo->prepare('insert into form_r_asset (form_id,asset_id,start_time,end_time,status) values (?,?,?,?,?)');
     
     if($stmt->execute(array($project_title,$course_code,$status,$form_id))){

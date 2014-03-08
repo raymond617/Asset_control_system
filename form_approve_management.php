@@ -78,7 +78,11 @@ if (checkLogined() == true) {
             <body>
                 <header class="row">
                     <h1 id="site_logo"><a href="index.php">Laboratory asset tracking system</a></h1>
-                    <h2 id="page_name">Form Management</h2>
+                    <?php if($Object->getUserLevel() == 3){ ?>
+                    <h2 id="page_name">Form Approval form technicians</h2>
+                    <?php }else{ ?>
+                    <h2 id="page_name">Form Approval form professors</h2>
+                    <?php } ?>
                     <?php include dirname(__FILE__) . "/common_content/login_panel.php"; // div of login panel?>
                 </header>
                 <?php

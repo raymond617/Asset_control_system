@@ -5,7 +5,7 @@ require_once ('../module/assetModule.php');
 
 if(isset($_GET['start_time'])&&isset($_GET['end_time'])&&isset($_GET['bench_id'])){
     
-    $benchTimeList = getBenchTimesList($_GET['bench_id'],1);
+    $benchTimeList = getBenchTimesList($_GET['bench_id'],3);
     $result = "success";
     foreach ($benchTimeList as $value) {
         $s_time_l = $value['start_time'];
