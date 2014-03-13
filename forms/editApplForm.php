@@ -29,6 +29,7 @@ if (checkLogined() == true) {
                 </style>
             </head>
             <body>
+                <h2>Edit reservation form</h2>
                 <form action="../functions/FormProcessor.php" method="post" id="prof_form_approve">
                     <label for="formID">Form ID:</label>
                     <input id="formID" name="formID" type="text" value="<?php echo $formInfo['form_id'] ?>" readonly>

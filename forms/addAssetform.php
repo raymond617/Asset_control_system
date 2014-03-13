@@ -10,9 +10,19 @@
 <html>
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
  <link rel="stylesheet" type="text/css" href="../css/form_style.css"/>
+ <style>
+     body{
+         width:500px;
+     }
+     select,label{
+                        display:block;
+                    }
+ </style>
 </head>
 <body>
+    <h2>Add asset</h2>
 <form action="../functions/assetsProcessor.php" method="post" id="add_asset">
 	<label for="labID">Laboratory ID:</label>
 	<input id="labID" name="labID" type="text" value="">

@@ -43,7 +43,11 @@ header{
 body{
     margin:0.5em auto;
     padding: 0.5em auto;
+    width:960px;
 }   
+article{
+    padding:0.5em;
+}
 form {
     font-family: Helvetica, Arial, sans-serif;
     max-width: 500px;

@@ -9,7 +9,8 @@ if (checkLogined() == true && $_SESSION['object']->getUserLevel() == 3) {
     <html>
         <head>
             <meta charset="UTF-8">
-            <title></title>
+            <title>Admin page</title>
+            <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
             <link rel="stylesheet" type="text/css" href="css/common_style.css"/>
         </head>
         <body>
@@ -23,6 +24,7 @@ if (checkLogined() == true && $_SESSION['object']->getUserLevel() == 3) {
                 <li><a href="forms/experiment_reservation_form.php">Reserve an experiment</a></li>
                 <li><a href="form_management.php">Form management</a></li>
                 <li><a href="form_approve_management.php">Approve forms</a></li>
+                <li><a href="forms/lendingPage.php">Lending page</a></li>
             </ul>
 
         </body>
