@@ -96,3 +96,11 @@ AND a.asset_id = f.asset_id');
     return $benchTimeList;
 }
 
+function getAssetWithSOP(array $asset_id){
+    global $pdo;
+    $ids = join(',',$asset_id);
+    $stmt = $pdo->query('SELECT asset_id,name,sop FROM `assets` WHERE sop is not null and asset_id IN ('.$ids.')');
+    $stmt->execute();
+    $assetWithSOPList = $stmt->fetchAll();
+    return $assetWithSOPList;
+}
