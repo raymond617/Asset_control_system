@@ -29,13 +29,13 @@ if (checkLogined() == true) {
                 <body>
                     <header class="row">
                     <h1 id="site_logo"><a href="../index.php">Laboratory asset tracking system</a></h1>
-                    <h2 id="page_name">Form Management</h2>
+                    <h2 id="page_name">lending Page</h2>
                     <?php include rootPath() . "common_content/login_panel.php"; // div of login panel?>
                 </header>
                     <article>
 <?php                    if (isset($_GET['form_id'])) {
-            $currentFormID = $_GET['form_id'];
-            $formInfo = $_SESSION['object']->getFormInfo($currentFormID);
+                            $currentFormID = $_GET['form_id'];
+                            $formInfo = $_SESSION['object']->getFormInfo($currentFormID);
             ?>
                     <form action="../functions/FormProcessor.php" method="post" id="lend">
                         <label for="formID">Form ID:</label>
@@ -45,17 +45,17 @@ if (checkLogined() == true) {
                             <input id="studID" name="studID[]" type="text" value="<?php echo $value['id'] ?>" readonly>
                         <?php } ?>
                         <label for="project_title">Project title:</label>
-                        <input id="project_title" name="project_title" type="text" value="<?php echo $formInfo['project_title']; ?>">
+                        <input id="project_title" name="project_title" type="text" value="<?php echo $formInfo['project_title']; ?>" readonly>
                         <label for="appl_time">Apply Time:</label>
                         <input id="appl_time" name="appl_time" type="text" value="<?php echo $formInfo['apply_timestamp']; ?>" readonly>
                         <label for="course_code">Course code:</label>
-                        <input id="course_code" name="course_code" type="text" value="<?php echo $formInfo['course_code'] ?>">
+                        <input id="course_code" name="course_code" type="text" value="<?php echo $formInfo['course_code'] ?>" readonly>
                         <label for="professor">Professor:</label>
                         <input id="professor_id" name="professor_id" type="hidden" value="<?php echo $formInfo['prof_id']; ?>" >
                         <input id="professor" name="professor" type="text" value="<?php echo $_SESSION['object']->getProfessorName($formInfo['prof_id'])[0][0]; ?>" disabled="disabled">
                         <label for="bench">Bench:</label>
                         <input id="bench" name="bench" value="<?php echo $formInfo['bench'][0]['asset_id'] ?>" type="hidden">
-                        <input id="bench" name="bench" value="<?php echo $formInfo['bench'][0]['name'] ?>" disabled type="text">
+                        <input id="bench" name="bench_name" value="<?php echo $formInfo['bench'][0]['name'] ?>" disabled type="text">
                         <div class="control-group">
                             <label for="start_time">Start time:</label>
                             <input size="16" type="text" value="<?php echo $formInfo['bench'][0]['start_time'] ?>" name="start_time" id="start_time" readonly>
@@ -71,9 +71,9 @@ if (checkLogined() == true) {
                         foreach ($formInfo['asset_array'] as $value) {
                             ?>
                             <label><?php echo $i; ?></label>
-                            <input type="text" value="<?php echo $value['type']; ?>" readonly>
-                            <input type="text" value="<?php echo $value['name'] ?>" readonly>
-                            <input type="text" name="asset[]" value="<?php echo $value['asset_id'] ?>" >
+                            <input type="text" id="type<?php echo $i;?>" value="<?php echo $value['type']; ?>" readonly>
+                            <input type="text" id="name<?php echo $i;?>" value="<?php echo $value['name'] ?>" readonly>
+                            <input type="text" id="asset_id<?php echo $i;?>"name="asset[]" value="<?php echo $value['asset_id'] ?>"  onchange="checkAsset(this,'#type<?php echo $i;?>','#name<?php echo $i;?>');">
                             <?php
                             $i++;
                         }
@@ -93,10 +93,11 @@ if (checkLogined() == true) {
                     <label for="search_type">Search by:</label>
                     <select name="search_type" form="search_form" id="search_type">
                         <option value="form_id">Form ID</option>
-                        <option value="id">Student ID</option>
+                        <option value="student_id">Student ID</option>
                     </select>
                     <label for="input">ID:</label>
                     <input type="text" placeholder="" name="input" id="input">
+                    <input id="search_form" name="search_form" type="hidden" value="true">
                     <input type="submit" value="Submit">
                 </form>
                 
@@ -121,15 +122,51 @@ if (checkLogined() == true) {
                         //$("#"+typeSelectID+" option[text=" +type+"]").attr("selected","selected") ;
                         //$("#"+assetSelectID+" option[text=" +asset+"]").attr("selected","selected") ;
                     }
-
+                    function checkAsset(self,type, name){
+                        //var asset_type = document.getElementById(type);
+                        //var asset_name = document.getElementById(name);
+                        $.ajax({
+                            type:"GET",
+                            url: "../ajax/checkAssetType.php",
+                            data: "type="+$(type).val()+"&name="+$(name).val()+"&id="+$(self).val(),
+                            success: function(result) {
+                                //alert(result);
+                                if(result === "false"){
+                                    $(self).css({'background-color': 'red'});
+                                }else{
+                                    $(self).css({'background-color': '#A3FAB0'});
+                                    $(name).val(result);
+                                    //alert(result);
+                                }
+                            },
+                            error: function () {
+                                alert("An error ocurred.");
+                            }
+                        });
+                    }
+                    function getAssetByType(self,targetID){
+                var type = 'type='+$(self).val();
+                //alert(type);
+                $.ajax({type:"GET",
+                        url: "../ajax/getAssetByType.php",
+                        data: type,
+                        success: function(msg) {
+                            //alert(msg);
+                            $(targetID).html(msg);
+                        },
+                        error: function () {
+                            alert("An error ocurred.");
+                        }
+                });
+            }
                 </script>
 
 <?php                
         } else {
             echo "You have no authorize\n redirect in 3 seconds";
-            header('Refresh: 3;url=index.php');
+            header('Refresh: 3;url=../index.php');
         }
     } else {
         echo "You need login as an admin.";
-        header('Refresh: 3;url=index.php');
+        header('Refresh: 3;url=../index.php');
     }

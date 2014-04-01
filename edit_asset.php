@@ -12,8 +12,9 @@ if (checkLogined() == true) {
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
                 <link rel="stylesheet" type="text/css" href="css/common_style.css"/>
                 <script type="text/javascript" src="fancybox/lib/jquery-1.10.1.min.js"></script>
-                <script type="text/javascript" src="fancybox/source/jquery.fancybox.js?v=2.1.5"></script>
+                <script type="text/javascript" src="fancybox/source/jquery.fancybox.js?v=2.1.5"></script>                
                 <link rel="stylesheet" type="text/css" href="fancybox/source/jquery.fancybox.css?v=2.1.5" media="screen" />
+                <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
                 <script type="text/javascript">
                     $(document).ready(function() {
                         $('.fancybox').fancybox({
@@ -33,10 +34,11 @@ if (checkLogined() == true) {
                             }
                         });
                     });
+                    $(document).ready(function() {
+                        $('#asset_table').dataTable();
+                    });
                 </script>
-
                 <style  type="text/css">
-
                     input,label{
                         display:block;
                     }
@@ -73,6 +75,9 @@ if (checkLogined() == true) {
                         margin: 0.5em 1em;
                         float: left;
                     }
+                    #action{
+                        margin-top:0.7em;
+                    }
                 </style>
             </head>
             <body>
@@ -86,39 +91,43 @@ if (checkLogined() == true) {
                 ?>
                 <article>
                     <form action="functions/assetsProcessor.php" method="post" class="" onSubmit="return confirm('Selected asset will be deleted. Are you sure?')">
-                        <label for="Delete Asset">Action: </label>
+                        <label for="Delete Asset" id="action">Action: </label>
                         <input type="submit" class="actionBtn" name="Delete Asset" value="Delete" id="delete_asset">
                         <a id="add_asset" class="fancybox" data-fancybox-type="iframe" href="forms/addAssetform.php" style="display:hidden;"></a>
                         <input type="button" class="actionBtn" value="Add Asset" id="add_asset" onClick="callFancyBox(this.value);">
                         <br>
                         <br>
-                        <table>
-                            <tr>
-                                <th><input type="checkbox" class="admin_mem_checkBox" name="all" onClick="check_all(this, 'row_selected[]')"></th>
-                                <th>Asset ID</th>
-                                <th>Asset Type</th>
-                                <th>status</th>
-                                <th>name</th>
-                                <th>days before alert</th>
-                                <th>belongs to lab</th>
-                            </tr>
-                            <?php
-                            foreach ($assetInfoArray as $row) {
-                                ?>
+                        <table id="asset_table">
+                            <thead>
                                 <tr>
-                                    <td class="narrowCol"><input type="checkbox" class="admin_mem_checkBox" name="row_selected[]" value="<?php echo $row['asset_id'] ?>"></td>
-                                    <td><?php echo $row['asset_id'] ?></td>
-                                    <td><?php echo $row['type'] ?></td>
-                                    <td><?php echo $row['status'] ?></td>
-                                    <td><?php echo $row['name'] ?></td>
-                                    <td><?php echo $row['days_b4_alert'] ?></td>
-                                    <td><?php echo $row['lab_id'] ?></td>
-
-                                    <td><a id="edit_asset" class="fancybox" data-fancybox-type="iframe" href="forms/editAssetform.php?asset_id=<?php echo $row['asset_id'] ?>">Edit</a>
-                                        <a class="fancybox" data-fancybox-type="iframe" href="functions/assetsProcessor.php?delete_asset=true&asset_id=<?php echo $row['asset_id'] ?>">Delete</a>
-                                        </td>
+                                    <th><input type="checkbox" class="admin_mem_checkBox" name="all" onClick="check_all(this, 'row_selected[]')"></th>
+                                    <th>Asset ID</th>
+                                    <th>Asset Type</th>
+                                    <th>status</th>
+                                    <th>name</th>
+                                    <th>days before alert</th>
+                                    <th>belongs to lab</th>
                                 </tr>
-                            <?php } ?>
+                            </thead>
+                            <tbody>
+                                <?php
+                                foreach ($assetInfoArray as $row) {
+                                    ?>
+                                    <tr>
+                                        <td class="narrowCol"><input type="checkbox" class="admin_mem_checkBox" name="row_selected[]" value="<?php echo $row['asset_id'] ?>"></td>
+                                        <td><?php echo $row['asset_id'] ?></td>
+                                        <td><?php echo $row['type'] ?></td>
+                                        <td><?php echo $row['status'] ?></td>
+                                        <td><?php echo $row['name'] ?></td>
+                                        <td><?php echo $row['days_b4_alert'] ?></td>
+                                        <td><?php echo $row['lab_id'] ?></td>
+
+                                        <td><a id="edit_asset" class="fancybox" data-fancybox-type="iframe" href="forms/editAssetform.php?asset_id=<?php echo $row['asset_id'] ?>">Edit</a>
+                                            <a class="fancybox" data-fancybox-type="iframe" href="functions/assetsProcessor.php?delete_asset=true&asset_id=<?php echo $row['asset_id'] ?>">Delete</a>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
                         </table>
                     </form>
                     <!--///////////////////////-->
@@ -142,8 +151,8 @@ if (checkLogined() == true) {
                 {
                     $('#add_asset').trigger('click');
                 }
-            </script>
 
+            </script>            
         </html>
         <?php
     } else {

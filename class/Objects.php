@@ -143,7 +143,7 @@ class AdminObject extends UserInfo{
             return listAllForms();
         }
         public function getFormInfo($form_id){
-            return showOneFormDetail($form_id);
+            return showOneForm($form_id);
         }
         public function deleteForm($form_id){
             try{
@@ -157,6 +157,9 @@ class AdminObject extends UserInfo{
         }
         public function listFormsWithStatus($status){
             return listAllFormsWithStatus($status);
+        }
+        public function listFormByStudentID($student_id){
+            return listFormByStudentID($student_id);
         }
 }
 class TeacherObject extends UserInfo{

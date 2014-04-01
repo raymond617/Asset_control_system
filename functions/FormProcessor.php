@@ -26,19 +26,8 @@ try {
             }
         }catch (Exception $e){
             echo "Create object failed.\n";
-        
         }
-        /*foreach ($student_id_list as $key){
-            echo $key."<br>";
-        }
-        echo $start_time."<br>";
-        echo $end_time."<br>";
-        
-        $ts_start=  strtotime($start_time);
-        echo $ts_start."<br>";
-        $ts_end=  strtotime($end_time);
-        echo $ts_end."<br>";
-        */
+       
     }else if(isset($_POST['row_selected'])){
         $list_of_forms = $_POST['row_selected'];
         try{
@@ -75,6 +64,69 @@ try {
             echo "module process fail\n";
         
         }
+    }/*else if(isset($_GET['search_form'])){
+        $search_type = $_GET['search_type'];
+        $input = $_GET['input'];
+        try{
+            if(strcmp($search_type,"form_id")==0){
+                if(checkFormExpire($input)==true){
+                    echo "Form expired";
+                    header('Refresh: 3;url=../forms/lendingPage.php');
+                }else{
+                    header('Location:../forms/lendingPage.php?form_id='.$input);
+                }
+            }else if(strcmp($search_type,"id")==0){
+                header('Location:../forms/reserved_form.php?student_id='.$input);
+            }
+        }catch (Exception $e){
+            //echo "Delete assets failed.\n";
+            header('Location:../lendingPage.php');
+        }
+    }*/
+    else if(isset($_POST['lent'])){
+        $asset_list = $_POST['asset'];
+        $status = $_POST['status'];
+        $form_id = $_POST['formID'];
+        $start_time = $_POST['start_time'];
+        $end_time = $_POST['end_time'];
+        $bench = $_POST['bench'];
+        try{
+            if(lendingAsset($form_id,$asset_list,$start_time,$end_time,$bench)==TRUE){
+                echo 'lending success!';
+                header('Refresh: 3;url=../forms/lendingPage.php');
+            }else{
+                echo 'Lending fail!<br> error occur.';
+                header('Refresh: 3;url=../forms/lendingPage.php');
+            }
+        }catch (Exception $e){
+            echo "module process fail\n";
+        
+        }
+    }
+    else if(isset($_GET['delete_form'])){
+        $form_id = $_GET['form_id'];
+        try{
+            if(deleteFormM($form_id)==true){
+                echo 'Delete form success!';
+                header('Refresh: 3;url=../form_management.php');
+            }else{
+                echo 'Delete form fail!';
+                header('Refresh: 3;url=../form_management.php');
+            }
+        }catch (Exception $e){
+            echo "module fail.\n";
+            header('Location:../form_management.php');
+        }
+    }else if(isset($_POST['return'])){
+        $asset_id = $_POST['asset_id'];
+        if(returnAsset($asset_id)==true){
+            echo 'Asset id:'.$asset_id.' return success !';
+            header('Refresh: 3;url=../forms/returnPage.php');
+        }else{
+            echo 'Asset id:'.$asset_id.' return fail !';
+            header('Refresh: 3;url=../forms/returnPage.php');
+        }
+        
     }
 } catch (Exception $e) {
     echo "Exception.\n";

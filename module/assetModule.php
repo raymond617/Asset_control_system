@@ -71,7 +71,7 @@ function getBenchList() {
 }
 function getAssetTypesM(){
     global $pdo;
-    $stmt = $pdo->prepare('SELECT DISTINCT type FROM assets');
+    $stmt = $pdo->prepare('SELECT DISTINCT type FROM assets where type <> "bench"');
     $stmt->execute();
     $types = $stmt->fetchAll();
     return $types;

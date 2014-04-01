@@ -5,9 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once ('../functions/system_function.php');
-require_once ('../module/assetModule.php');
 
-$sopList = getAssetWithSOP(array (11,16,1,14,24));
-
-print_r($sopList);
+require_once ('../module/FormModule.php');
+$formList = listFormByStudentID(10002000);
+print_r($formList);

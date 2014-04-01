@@ -76,3 +76,7 @@ body{
 select{
     display:block;
 }
+header{
+    display:block;
+    overflow:hidden;
+}

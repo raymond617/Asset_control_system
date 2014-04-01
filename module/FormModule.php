@@ -147,7 +147,9 @@ function showOneFormDetail($form_id){
     return $OneFormInfo;
 }
 function deleteFormM($form_id){
-    
+    global $pdo;
+    $stmt = $pdo->prepare('DELETE from appl_form where form_id = ?');
+    return $stmt->execute(array($form_id));    
 }
 function edit_and_approveForm($form_id,$project_title,$course_code,$asset_array,$status,$bench,$start_time,$end_time){
     global $pdo;
@@ -175,4 +177,59 @@ function edit_and_approveForm($form_id,$project_title,$course_code,$asset_array,
     }else{
         return false;
     }
+}
+function lendingAsset($form_id,$assetid_list,$start_time,$end_time,$bench){
+    global $pdo;
+    $count = 0;
+    $stmt =$pdo->prepare('DELETE From form_r_asset where form_id = ? AND asset_id IN (SELECT asset_id from assets)');
+    $stmt2 = $pdo->prepare('insert into form_r_asset (form_id,asset_id,start_time,end_time,status,real_start) values (?,?,?,?,?,?)');
+    $timestamp = date('Y-m-d G:i:s');
+    if($stmt->execute(array($form_id))){
+        $count++;
+    }
+    foreach($assetid_list as $value){
+        if($stmt2->execute(array($form_id,$value,$start_time,$end_time,4,$timestamp))){
+            $count++;
+        }
+    }
+    if($stmt2->execute(array($form_id,$bench,$start_time,$end_time,4,$timestamp))){
+        $count++;
+    }
+    if($count == 2+count($assetid_list)){
+        return true;
+    }else{
+        return false;
+    }
+}
+function checkFormExpire($form_id){
+    global $pdo;
+    $timestamp = date('Y-m-d G:i:s');
+    $stmt=$pdo->prepare('select end_time from form_r_asset where form_id = ?');
+    $stmt->execute(array($form_id));
+    $end_time_list = $stmt->fetchAll();
+    if($end_time_list==null){
+        return "notfound";
+    }
+    $end_time = $end_time_list[0][0];
+    if($timestamp >= $end_time){
+        return true;
+    }else{
+        return false;
+    }   
+}
+function listFormByStudentID($student_id){
+    global $pdo;
+    $stmt = $pdo->prepare('select form_id from users_r_form where id = ?');
+    $stmt->execute(array($student_id));
+    $form_list = $stmt->fetchAll();
+    return $form_list;
+}
+function returnAsset($asset_id){
+    global $pdo;
+    $timestamp = date('Y-m-d G:i:s');
+    $stmt = $pdo->prepare('update form_r_asset set status = ?, real_end = ? where asset_id = ? and status = 4');
+    if($stmt->execute(array(5,$timestamp,$asset_id)))
+        return true;
+    else
+        return false;
 }

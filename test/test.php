@@ -19,3 +19,4 @@ foreach ($assetInfoArray as $key => $value){
         echo "porperty: $key, => $value\n";
     }
 }
+print_r($assetInfoArray);
