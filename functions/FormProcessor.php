@@ -16,6 +16,15 @@ try {
         $end_time = $_POST['end_time'];        
         $student_id_list = $_POST['studID'];
         $asset_list = $_POST['asset'];
+        $_SESSION['experiment_reservation_form']['project_title'] = $project_title;
+        $_SESSION['experiment_reservation_form']['professor_id'] = $professor_id;
+        $_SESSION['experiment_reservation_form']['course_code'] = $course_code;
+        $_SESSION['experiment_reservation_form']['bench'] = $bench;
+        $_SESSION['experiment_reservation_form']['start_time'] = $start_time;
+        $_SESSION['experiment_reservation_form']['end_time'] = $end_time;
+        $_SESSION['experiment_reservation_form']['studID'] = $student_id_list;
+        $_SESSION['experiment_reservation_form']['asset'] = $asset_list;
+        
         try{
             if(formSubmit($student_id_list, $asset_list, $project_title, $professor_id, $course_code, $bench,'l',$start_time,$end_time)==true){
                 echo 'Form submit success!';
@@ -126,7 +135,9 @@ try {
             echo 'Asset id:'.$asset_id.' return fail !';
             header('Refresh: 3;url=../forms/returnPage.php');
         }
-        
+    }else if(isset($_POST['barcode'])){
+        $barcode_id = $_POST['id'];
+        header('Location: barcodegen/generator.php?barcode='.$barcode_id);
     }
 } catch (Exception $e) {
     echo "Exception.\n";

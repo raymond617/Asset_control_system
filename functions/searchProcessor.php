@@ -12,8 +12,12 @@ try {
         $input = $_GET['input'];
         try{
             if(strcmp($search_type,"form_id")==0){
-                if(strcmp(checkFormExpire($input),"notfound")==0){
+                if(!checkFormApproval($input)){
+                    echo "Still wait for approval";
+                    header('Refresh: 3;url=../forms/lendingPage.php');
+                }else if(strcmp(checkFormExpire($input),"notfound")==0){
                     echo "not existed";
+                    header('Refresh: 3;url=../forms/lendingPage.php');
                 }else if(checkFormExpire($input)==true){
                     echo "Form expired";
                     header('Refresh: 3;url=../forms/lendingPage.php');

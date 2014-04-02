@@ -217,12 +217,38 @@ function checkFormExpire($form_id){
         return false;
     }   
 }
+function checkFormApproval($form_id){
+     global $pdo;
+     $stmt=$pdo->prepare('select status from appl_form where form_id = ? limit 1');
+     $stmt->execute(array($form_id));
+     $status = $stmt->fetch();
+     return $status[0]=='3';
+}
 function listFormByStudentID($student_id){
     global $pdo;
     $stmt = $pdo->prepare('select form_id from users_r_form where id = ?');
     $stmt->execute(array($student_id));
     $form_list = $stmt->fetchAll();
     return $form_list;
+}
+function listAllFormsDetailByUserID($user_id) {
+    global $pdo;
+    $stmt = $pdo->prepare('select a.* from appl_form a, users_r_form u where a.form_id = u.form_id and u.id = ? ORDER BY `apply_timestamp` 
+LIMIT 0 , 30');
+    $stmt->execute(array($user_id));
+    $FormInfoArray = $stmt->fetchAll();
+    $fullFormArray = array();
+    foreach ($FormInfoArray as $row) {
+        $one_column = $row;
+        $userArray = listAllUsersFromForm($row['form_id']);
+        $AssetArray = listAllAssetsFromFormWithoutBench($row['form_id']);
+        $bench = findTheBenchFromForm($row['form_id']);
+        $one_column['user_array'] = $userArray;
+        $one_column['asset_array'] = $AssetArray;
+        $one_column['bench'] = $bench;
+        array_push($fullFormArray, $one_column);
+    }
+    return $fullFormArray;
 }
 function returnAsset($asset_id){
     global $pdo;

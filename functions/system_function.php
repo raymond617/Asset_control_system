@@ -13,3 +13,17 @@ function checkWithIn2Times($start,$end,$timeToCheck){
     else
         return false;
 }
+function statusTranslation($status){
+    switch($status){
+        case 3:
+            return "Approved";
+        case 2:
+            return "Wait for technician's approval";
+        case 1:
+            return "Wait for professor's approval";
+        case 9:
+            return "Rejected";
+        default :
+            return "Error";
+    }
+}

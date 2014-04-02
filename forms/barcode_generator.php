@@ -18,44 +18,25 @@ if (checkLogined() == true) {
                     select,label{
                         display:block;
                     }
-                    #p_scents input,#asset_list input{
-                        display: block;
-                    }
-                    #p_scents a,#asset_list a{                    
-                        display:inline;
-                    }
                 </style>
             </head>
             <body>
                 <header class="row">
                     <h1 id="site_logo"><a href="../index.php">Laboratory asset tracking system</a></h1>
-                    <h2 id="page_name">Return Page</h2>
+                    <h2 id="page_name">Barcode generator</h2>
                     <?php include rootPath() . "common_content/login_panel.php"; // div of login panel?>
                 </header>
                 <article>
                     <form action="../functions/FormProcessor.php" method="post" id="return">
-                        <label for="asset_id">Asset ID:</label>
-                        <div id="asset_list">
-                            <input id="asset_id" name="asset_id" type="text" value="" placeholder="Asset ID">
-                        </div>
-                        <input type="hidden" name="return" value="true">
-                        <input type="submit" value="return">
+                        <label for="ad">ID:</label>
+                        <input id="id" name="id" type="text" value="" placeholder="ID">
+                        <input type="hidden" name="barcode" value="true">
+                        <input type="submit" value="Generate">
                     </form>
                 </article>
            </body>
            <script type="text/javascript" src="../javascript/jquery-1.8.3.min.js" charset="UTF-8"></script>
-           <script type="text/javascript">
-               $(window).load(function() {
-                                $(function() {
-                                    var scntDiv = $('#asset_list');
-                                    var i = $('#asset_list p').size() + 1;
-
-                                    $('#addAsset').live('click', function() {
-                                        $('<p><input id="asset_id" name="asset_id" type="text" value="" placeholder="Asset ID"></p>').appendTo(scntDiv);
-                                        i++;
-                                        return false;
-                                    });
-           </script>
+           
         </html>
 <?php
     } else {
