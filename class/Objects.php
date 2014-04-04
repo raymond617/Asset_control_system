@@ -151,9 +151,12 @@ class AdminObject extends UserInfo{
         public function listForms(){
             return listAllForms();
         }
+<<<<<<< HEAD
         public function listEquipimentForms(){
             return listAllEquipimentForms();
         }
+=======
+>>>>>>> f47c316af589fdc030f12040494463026dbf9bf2
         public function deleteForm($form_id){
             try{
                 return deleteFormM($form_id);

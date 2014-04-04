@@ -24,7 +24,11 @@ if (checkLogined() == true) {
                 <header class="row">
                     <h1 id="site_logo"><a href="../index.php">Laboratory asset tracking system</a></h1>
                     <h2 id="page_name">Barcode generator</h2>
+<<<<<<< HEAD
                     <?php include rootPath() . "common_content/login_panel_deep.php"; // div of login panel?>
+=======
+                    <?php include rootPath() . "common_content/login_panel.php"; // div of login panel?>
+>>>>>>> f47c316af589fdc030f12040494463026dbf9bf2
                 </header>
                 <article>
                     <form action="../functions/FormProcessor.php" method="post" id="return">

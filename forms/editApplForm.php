@@ -130,11 +130,15 @@ if (checkLogined() == true) {
                     <input type="text" value="<?php echo statusTranslation($status)?>" readonly>
                     <input type="hidden" name="status"value="<?php echo $status?>">
                     <?php }else if($Object->getUserLevel() ==3){?>
+<<<<<<< HEAD
                     <?php if($status >=3){?>
                     <select name="status" form="prof_form_approve" id="status" disabled="disabled">
                     <?php }else{ ?>
                         <select name="status" form="prof_form_approve" id="status">
                     <?php } ?>           
+=======
+                    <select name="status" form="prof_form_approve" id="status">
+>>>>>>> f47c316af589fdc030f12040494463026dbf9bf2
                         <option value="3">Approved</option>
                         <option value="2">Wait for technician's approval</option>
                         <option value="1">Wait for professor's approval</option>

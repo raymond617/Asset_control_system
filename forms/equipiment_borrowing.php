@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 require_once ('../functions/system_function.php');
 require_once (rootPath() . 'class/Objects.php');
@@ -210,3 +211,22 @@ if (isset($_SESSION['approved']) && $_SESSION['approved'] == 1) {
     header('Refresh: 3;url=../index.php');
 }
 ?>		
+=======
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <?php
+        // put your code here
+        ?>
+    </body>
+</html>
+>>>>>>> f47c316af589fdc030f12040494463026dbf9bf2
