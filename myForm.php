@@ -3,8 +3,8 @@ require_once 'class/Objects.php';
 require_once ('functions/system_function.php');
 session_start();
 if (checkLogined() == true) {
-    $adminObject = $_SESSION['object'];
-    if ($adminObject->getUserLevel() == 3) {
+    $Object = $_SESSION['object'];
+    if ($Object->getUserLevel() >=1) {
         ?>
         <!doctype html>
         <html>
@@ -58,12 +58,6 @@ if (checkLogined() == true) {
                     th {
                         border-bottom: 0.3em solid #1A7480;
                     }
-                    .narrowCol,.admin_mem_checkBox {
-                        min-width: 3em;
-                    }
-                    .narrowCol input,.admin_mem_checkBox input{
-                        min-width: 3em;
-                    }
                     .wideCol {
                         min-width: 12em;
                     }
@@ -78,23 +72,16 @@ if (checkLogined() == true) {
             <body>
                 <header class="row">
                     <h1 id="site_logo"><a href="index.php">Laboratory asset tracking system</a></h1>
-                    <h2 id="page_name">Form Management</h2>
+                    <h2 id="page_name">My form</h2>
                     <?php include dirname(__FILE__) . "/common_content/login_panel.php"; // div of login panel?>
                 </header>
                 <?php
-                $formInfoArray = $adminObject->listForms();
+                $formInfoArray = $Object->listMyForm();
                 ?>
                 <article>
-                    <form action="functions/FormProcessor.php" method="post" class="" onSubmit="return confirm('Selected forms will be deleted. Are you sure?')">
-                        <label for="Delete Form">Action: </label>
-                        <input type="submit" class="actionBtn" name="Delete Form" value="Delete" id="delete_form">
-                        <a id="add_form" class="fancybox" data-fancybox-type="iframe" href="forms/experiment_reservation_form.php" style="display:hidden;"></a>
-                        <input type="button" class="actionBtn" value="Add Form" id="add_form" onClick="callFancyBox(this.value);">
-                        <br>
-                        <br>
                         <table>
+                            <thead>
                             <tr>
-                                <th><input type="checkbox" class="admin_mem_checkBox" name="all" onClick="check_all(this, 'row_selected[]')"></th>
                                 <th>Apply Time</th>
                                 <th>Form ID</th>
                                 <th>Project title</th>
@@ -104,12 +91,12 @@ if (checkLogined() == true) {
                                 <th>End time</th>
                                 <th>Status</th>
                             </tr>
+                            </thead>
+                            <tbody>
                             <?php
                             foreach ($formInfoArray as $row) {
                                 ?>
-                            
                                 <tr>    
-                                    <td class="narrowCol"><input type="checkbox" class="admin_mem_checkBox" name="row_selected[]" value="<?php echo $row['form_id'] ?>"></td>
                                     <td><?php echo $row['apply_timestamp'] ?></td>
                                     <td><?php echo $row['form_id'] ?></td>
                                     <td><?php echo $row['project_title'] ?></td>
@@ -117,42 +104,28 @@ if (checkLogined() == true) {
                                     <td><?php echo "ID:".$row['bench'][0]['asset_id']."  Name:".$row['bench'][0]['name'] ?></td>
                                     <td><?php echo $row['bench'][0]['start_time'] ?></td>
                                     <td><?php echo $row['bench'][0]['end_time'] ?></td>
-                                    <td><?php echo $row['status'] ?></td>
+                                    <td><?php echo statusTranslation($row['status']); ?></td>
                                     <td>
-                                        <a class="fancybox" data-fancybox-type="iframe" href="forms/editApplForm.php?form_id=<?php echo $row['form_id'] ?>">Detail or Edit</a>
+                                        <?php if($row['status']==1) {?>
+                                        <a class="fancybox" data-fancybox-type="iframe" href="forms/editApplForm.php?form_id=<?php echo $row['form_id'] ?>">Detail &AMP; Edit</a>
                                         <a class="fancybox" data-fancybox-type="iframe" href="functions/FormProcessor.php?delete_form=true&form_id=<?php echo $row['form_id'] ?>">Delete</a>
+                                        <?php } ?>
                                     </td>
                                 </tr>
                             <?php } ?>
+                                </tbody>
                         </table>
-                    </form>
                     <!--///////////////////////-->
                 </article>
             </body>
-            <script type='text/javascript' charset='utf-8'>
-
-                function check_all(obj, cName)
-                {
-                    var checkboxs = document.getElementsByName(cName);
-                    for (var i = 0; i < checkboxs.length; i++) {
-                        checkboxs[i].checked = obj.checked;
-                    }
-                }
-
-                function callFancyBox(val)
-                {
-                    $('#add_form').trigger('click');
-                }
-            </script>
-
-        </html>
+    </html>
         <?php
     } else {
         echo "You have no authorize\n redirect in 3 seconds";
         header('Refresh: 3;url=index.php');
     }
 } else {
-    echo "You need login as a professor.";
+    echo "You need login.";
     header('Refresh: 3;url=index.php');
 }
 ?>		

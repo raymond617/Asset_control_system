@@ -27,6 +27,8 @@ session_start();
                 ?>
                 <ul>
                     <li><a href="forms/experiment_reservation_form.php">Reserve an experiment</a></li>
+                    <li><a href="forms/equipiment_borrowing.php">Equipiment borrowing</a></li>
+                    <li><a href="myForm.php">My form</a></li>
                     <li><a href="admin_page.php">Admin Page</a></li>
                 </ul>
 
@@ -35,7 +37,9 @@ session_start();
                 ?>
                 <ul>
                     <li><a href="forms/experiment_reservation_form.php">Reserve an experiment</a></li>
+                    <li><a href="forms/equipiment_borrowing.php">Equipiment borrowing</a></li>
                     <li><a href="form_approve_management.php">Approve forms</a></li>
+                    <li><a href="myForm.php">My form</a></li>
                 </ul>
             <?php 
             
@@ -43,6 +47,8 @@ session_start();
                 ?>
                 <ul>
                     <li><a href="forms/experiment_reservation_form.php">Reserve an experiment</a></li>
+                    <li><a href="forms/equipiment_borrowing.php">Equipiment borrowing</a></li>
+                    <li><a href="myForm.php">My form</a></li>
                 </ul>
                 <?php
             }

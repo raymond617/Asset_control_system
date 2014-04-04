@@ -49,11 +49,42 @@ function formSubmit(array $userIDs, array $assets_id, $project_title, $professor
         return FALSE;
     }
 }
-
+function equipimentFormSubmit($userID, array $assets_id, $status, $start_time, $end_time) {
+    global $pdo;
+    //$newFormID=getNewFormID();
+    $count = 0;
+    $stmt = $pdo->prepare('insert into appl_form (status) values (?)');
+    $stmt2 = $pdo->prepare('insert into form_r_asset (form_id,asset_id,start_time,end_time,status) values (?,?,?,?,?)');
+    $stmt3 = $pdo->prepare('insert into users_r_form (id,form_id) values (?,?)');
+    try {
+        if ($stmt->execute(array($status)) == true) {
+            $count++;
+        }
+        $newID = $pdo->lastInsertId();
+        
+            if($stmt3->execute(array($userID, $newID))==true){
+                $count++;
+            }
+       
+        foreach ($assets_id as $value) {
+            $stmt2->execute(array($newID, $value, $start_time, $end_time, $status));
+            $count++;
+        }
+        
+        if ($count == 2 + count($assets_id)){
+            return true;
+        }else {
+            return false;
+        }
+    } catch (PDOException $e) {
+        //echo $e;
+        return FALSE;
+    }
+}
 function listAllForms() {
     global $pdo;
-    $stmt = $pdo->prepare('select * from appl_form ORDER BY `apply_timestamp` 
-LIMIT 0 , 30');
+    $stmt = $pdo->prepare('select * from appl_form where status >=1 and status <=5 or status = 9 ORDER BY `apply_timestamp` 
+');
     $stmt->execute();
     $FormInfoArray = $stmt->fetchAll();
     $fullFormArray = array();
@@ -69,6 +100,23 @@ LIMIT 0 , 30');
     }
     return $fullFormArray;
 }
+function listAllEquipimentForms() {
+    global $pdo;
+    $stmt = $pdo->prepare('select * from appl_form where status = 6 or status = 7 ORDER BY `apply_timestamp`');
+    $stmt->execute();
+    $FormInfoArray = $stmt->fetchAll();
+    $fullFormArray = array();
+    foreach ($FormInfoArray as $row) {
+        $one_column = $row;
+        $userArray = listAllUsersFromForm($row['form_id']);
+        $AssetArray = listAllAssetsFromFormWithoutBench($row['form_id']);
+        $one_column['user_array'] = $userArray;
+        $one_column['asset_array'] = $AssetArray;
+        array_push($fullFormArray, $one_column);
+    }
+    return $fullFormArray;
+}
+
 function listAllFormsWithStatus($status){
     global $pdo;
     $stmt = $pdo->prepare('select * from appl_form where status = ? ORDER BY `apply_timestamp` 
@@ -217,6 +265,13 @@ function checkFormExpire($form_id){
         return false;
     }   
 }
+function checkFormApproval($form_id){
+     global $pdo;
+     $stmt=$pdo->prepare('select status from appl_form where form_id = ? limit 1');
+     $stmt->execute(array($form_id));
+     $status = $stmt->fetch();
+     return $status[0]=='3';
+}
 function listFormByStudentID($student_id){
     global $pdo;
     $stmt = $pdo->prepare('select form_id from users_r_form where id = ?');
@@ -224,12 +279,33 @@ function listFormByStudentID($student_id){
     $form_list = $stmt->fetchAll();
     return $form_list;
 }
+function listAllFormsDetailByUserID($user_id) {
+    global $pdo;
+    $stmt = $pdo->prepare('select a.* from appl_form a, users_r_form u where a.form_id = u.form_id and u.id = ? ORDER BY `apply_timestamp` 
+LIMIT 0 , 30');
+    $stmt->execute(array($user_id));
+    $FormInfoArray = $stmt->fetchAll();
+    $fullFormArray = array();
+    foreach ($FormInfoArray as $row) {
+        $one_column = $row;
+        $userArray = listAllUsersFromForm($row['form_id']);
+        $AssetArray = listAllAssetsFromFormWithoutBench($row['form_id']);
+        $bench = findTheBenchFromForm($row['form_id']);
+        $one_column['user_array'] = $userArray;
+        $one_column['asset_array'] = $AssetArray;
+        $one_column['bench'] = $bench;
+        array_push($fullFormArray, $one_column);
+    }
+    return $fullFormArray;
+}
 function returnAsset($asset_id){
     global $pdo;
     $timestamp = date('Y-m-d G:i:s');
-    $stmt = $pdo->prepare('update form_r_asset set status = ?, real_end = ? where asset_id = ? and status = 4');
-    if($stmt->execute(array(5,$timestamp,$asset_id)))
-        return true;
+    $stmt = $pdo->prepare('update form_r_asset set status = ?, real_end = ? where asset_id = ? and status = ?');
+    if($stmt->execute(array(5,$timestamp,$asset_id,4)))
+            if($stmt->rowCount()>=1){
+                return true;
+            }else return false;
     else
         return false;
 }

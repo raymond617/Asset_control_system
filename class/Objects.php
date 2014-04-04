@@ -80,6 +80,15 @@ abstract class UserInfo{
         public function getAssetByType($type){
             return getAssetByTypes($type);
         }
+        public function listMyForm(){
+            return listAllFormsDetailByUserID($this->id);
+        }
+        public function getFormInfo($form_id){
+            return showOneForm($form_id);
+        }
+        public function getProfessorName($prof_id){
+            return getProfessorNameM($prof_id);
+        }
 }
 /////////////////////////////
 /*
@@ -142,8 +151,8 @@ class AdminObject extends UserInfo{
         public function listForms(){
             return listAllForms();
         }
-        public function getFormInfo($form_id){
-            return showOneForm($form_id);
+        public function listEquipimentForms(){
+            return listAllEquipimentForms();
         }
         public function deleteForm($form_id){
             try{
@@ -151,9 +160,6 @@ class AdminObject extends UserInfo{
             }catch(Exception $e){
                 echo "delete form failed.\n";
             }
-        }
-        public function getProfessorName($prof_id){
-            return getProfessorNameM($prof_id);
         }
         public function listFormsWithStatus($status){
             return listAllFormsWithStatus($status);

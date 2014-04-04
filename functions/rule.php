@@ -7,9 +7,8 @@
  */
 require_once ('../functions/system_function.php');
 require_once ('../module/assetModule.php');
-session_start();
 
 function checkSOPreviewer(array $assets_id){
-    $assetWithSOPList = getAssetWithSOP($asset_id);
+    $assetWithSOPList = getAssetWithSOP($assets_id);
     return $assetWithSOPList;
 }

@@ -28,6 +28,16 @@ function getAssetsByID($id) {
     else
         return null;
 }
+function getAssetNameByID($id) {
+    global $pdo;
+    $stmt = $pdo->prepare('SELECT name FROM assets where asset_id = ?');
+    $stmt->execute(array($id));
+    $assetInfoArray = $stmt->fetchAll();
+    if (count($assetInfoArray) > 0)
+        return $assetInfoArray;
+    else
+        return null;
+}
 
 function updateAsset($asset_id, $type, $status, $name, $days_b4_alert, $lab_id) {
     global $pdo;
@@ -95,6 +105,17 @@ AND a.asset_id = f.asset_id');
     $benchTimeList = $stmt->fetchAll();
     return $benchTimeList;
 }
+function getAssetTimesList($id,$status){
+    global $pdo;
+    $stmt = $pdo->prepare('SELECT start_time, end_time
+FROM `form_r_asset` f, assets a
+WHERE f.status =?
+AND f.asset_id =?
+AND a.asset_id = f.asset_id');
+    $stmt->execute(array($status,$id));
+    $benchTimeList = $stmt->fetchAll();
+    return $benchTimeList;
+}
 
 function getAssetWithSOP(array $asset_id){
     global $pdo;
@@ -103,4 +124,13 @@ function getAssetWithSOP(array $asset_id){
     $stmt->execute();
     $assetWithSOPList = $stmt->fetchAll();
     return $assetWithSOPList;
+}
+function getAssetReserveTime($id){
+    global $pdo;
+    $stmt = $pdo->prepare('SELECT start_time, end_time, status
+FROM `form_r_asset`
+WHERE asset_id =?');
+    $stmt->execute(array($id));
+    $benchTimeList = $stmt->fetchAll();
+    return $benchTimeList;
 }

@@ -82,7 +82,7 @@ if (checkLogined() == true) {
                     <?php include dirname(__FILE__) . "/common_content/login_panel.php"; // div of login panel?>
                 </header>
                 <?php
-                $formInfoArray = $adminObject->listForms();
+                $formInfoArray = $adminObject->listEquipimentForms();
                 ?>
                 <article>
                     <form action="functions/FormProcessor.php" method="post" class="" onSubmit="return confirm('Selected forms will be deleted. Are you sure?')">
@@ -97,9 +97,7 @@ if (checkLogined() == true) {
                                 <th><input type="checkbox" class="admin_mem_checkBox" name="all" onClick="check_all(this, 'row_selected[]')"></th>
                                 <th>Apply Time</th>
                                 <th>Form ID</th>
-                                <th>Project title</th>
                                 <th>Student IDs</th>
-                                <th>Bench</th>
                                 <th>Start time</th>
                                 <th>End time</th>
                                 <th>Status</th>
@@ -112,11 +110,11 @@ if (checkLogined() == true) {
                                     <td class="narrowCol"><input type="checkbox" class="admin_mem_checkBox" name="row_selected[]" value="<?php echo $row['form_id'] ?>"></td>
                                     <td><?php echo $row['apply_timestamp'] ?></td>
                                     <td><?php echo $row['form_id'] ?></td>
-                                    <td><?php echo $row['project_title'] ?></td>
+                                    
                                     <td><?php foreach($row['user_array'] as $value) echo $value['id'].'<br>' ?></td>
-                                    <td><?php echo "ID:".$row['bench'][0]['asset_id']."  Name:".$row['bench'][0]['name'] ?></td>
-                                    <td><?php echo $row['bench'][0]['start_time'] ?></td>
-                                    <td><?php echo $row['bench'][0]['end_time'] ?></td>
+                                    
+                                    <td><?php echo $row['asset_array'][0]['start_time'] ?></td>
+                                    <td><?php echo $row['asset_array'][0]['end_time'] ?></td>
                                     <td><?php echo $row['status'] ?></td>
                                     <td>
                                         <a class="fancybox" data-fancybox-type="iframe" href="forms/editApplForm.php?form_id=<?php echo $row['form_id'] ?>">Detail or Edit</a>

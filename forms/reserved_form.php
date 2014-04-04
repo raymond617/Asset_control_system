@@ -16,27 +16,7 @@ if (checkLogined() == true) {
                 <script type="text/javascript" src="../fancybox/lib/jquery-1.10.1.min.js"></script>
                 <script type="text/javascript" src="../fancybox/source/jquery.fancybox.js?v=2.1.5"></script>
                 <link rel="stylesheet" type="text/css" href="../fancybox/source/jquery.fancybox.css?v=2.1.5" media="screen" />
-                <script type="text/javascript">
-                    $(document).ready(function() {
-                        $('.fancybox').fancybox({
-                            maxWidth: 700,
-                            maxHeight: 400,
-                            fitToView: false,
-                            width: '70%',
-                            height: '70%',
-                            autoSize: false,
-                            closeClick: false,
-                            openEffect: 'none',
-                            closeEffect: 'none',
-                            afterClose: function() {
-                                window.setTimeout(function() {
-                                    window.location.href = window.location.href
-                                }, 1);
-                            }
-                        });
-                    });
-                </script>
-
+                
                 <style  type="text/css">
                     input,label{
                         display:block;
@@ -65,7 +45,7 @@ if (checkLogined() == true) {
             <body>
                 <header class="row">
                     <h1 id="site_logo"><a href="../index.php">Laboratory asset tracking system</a></h1>
-                    <h2 id="page_name">Reserved Form of User ID <?php echo $_GET['student_id']?></h2>
+                    <h2 id="page_name">Reserved form of Student ID: <?php echo $_GET['student_id']?></h2>
                     <?php include rootPath(). "/common_content/login_panel.php"; // div of login panel?>
                 </header>
                 <?php
@@ -82,7 +62,7 @@ if (checkLogined() == true) {
                             </tr>
                             <?php
                             foreach ($formList as $id) {
-                                if(checkFormExpire($id['form_id'])==false){
+                                if(checkFormExpire($id['form_id'])==false && checkFormApproval($id['form_id'])==true){
                                 $row=$adminObject->getFormInfo($id['form_id']);
                                 ?>
                             

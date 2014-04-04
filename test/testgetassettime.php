@@ -1,16 +1,14 @@
 <?php
-require_once ('../module/assetModule.php');
-//$type = $_GET['type'];
-//echo $type;
+require_once '../module/assetModule.php';
 
 if(isset($_GET['start_time'])&&isset($_GET['end_time'])&&isset($_GET['bench_id'])){
     
-    $benchTimeList = getAssetTimesList($_GET['bench_id'],3);
+    $benchTimeList = getAssetTimesList($_GET['bench_id'],1);
     $result = "success";
     foreach ($benchTimeList as $value) {
         $s_time_l = $value['start_time'];
         $e_time_l = $value['end_time'];
-        if(checkTimeOverlap($_GET['start_time'],$_GET['end_time'],$s_time_l,$e_time_l)){
+        if(checkTimeOverlap($start_time,$end_time,$s_time_l,$e_time_l)){
             $result = "fail";
             break;
         }
